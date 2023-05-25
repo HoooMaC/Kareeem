@@ -1,0 +1,9 @@
+
+.vs/Opengl(64-bit)/FileContentIndex/*.vsidx
+.vs/
+bin/
+bin-int/
+Kareeem.sln
+**.user
+**.filters
+**.vcsproj
