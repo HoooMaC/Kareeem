@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/KRMpch.h"
-#include "Core/Core.h"
+#include "Core\KRMpch.h"
+#include "Core\Core.h"
 
 namespace krm {
 

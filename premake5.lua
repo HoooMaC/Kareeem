@@ -14,6 +14,7 @@ startproject "Client"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "vendor/GLFW/include"
+IncludeDir["spdlog"] = "vendor/spdlog/include"
 
 project "Client"
     location "Client"
@@ -39,12 +40,13 @@ project "Client"
     includedirs
     {
         "Engine/src",
-        "%{IncludeDir.GLFW}"
+        "%{IncludeDir.GLFW}",
+        "%{IncludeDir.spdlog}"
     }
 
     filter "configurations:Debug"
         kind  "ConsoleApp"
-        defines { "_DEBUG" }
+        defines { "_DEBUG", "KRM_ENABLE_LOG" }
         runtime "Debug"
 
     filter "configurations:Release"
@@ -87,11 +89,12 @@ project "Engine"
     includedirs
     {
         "Engine/src",
-        "%{IncludeDir.GLFW}"
+        "%{IncludeDir.GLFW}",
+        "%{IncludeDir.spdlog}"
     }
 
     filter "configurations:Debug"
-        defines { "_DEBUG" }
+        defines { "_DEBUG", "KRM_ENABLE_LOG" }
         runtime "Debug"
 
     filter "configurations:Release"

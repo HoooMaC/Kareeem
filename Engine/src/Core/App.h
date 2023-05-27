@@ -1,25 +1,28 @@
 #pragma once
 #include "KRMpch.h"
 
+#include "Core\Window.h"
+
+#include "Events\Event.h"
 #include "Events\ApplicationEvent.h"
 #include "Events\KeyEvent.h"
 #include "Events\MouseEvent.h"
-#include <GLFW\glfw3.h>
+
 namespace krm {
 
-	class Application
+	class App
 	{
 	public:
-		Application(const std::string& name = "OpenGL Sandbox", uint32_t width = 1280, uint32_t height = 720);
-		virtual ~Application();
+		App(const std::string& name = "OpenGL Sandbox", uint32_t width = 1280, uint32_t height = 720);
+		virtual ~App();
 
-		void Run();
+		void run();
 
-		void OnEvent(Event& e);
+		void eventHandle(Event& e);
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 	private:
-		GLFWwindow* m_Window;
+		Window myWindow;
 		bool m_Running = true;
 	private:
 	};

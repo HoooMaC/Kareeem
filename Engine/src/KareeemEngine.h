@@ -1,5 +1,8 @@
 #pragma once
 
-#include "Core\Core.h"
 #include "Core\KRMpch.h"
-#include "Core\Application.h"
+#include "Core\Core.h"
+#include "Core\App.h"
+#include "Core\Log.h"
+#include "Core\Window.h"
+
