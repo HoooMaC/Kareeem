@@ -1,6 +1,6 @@
 workspace "Kareeem"
     architecture "x64"
-    staticruntime "on"
+    staticruntime "off"
 
     configurations 
     {
@@ -20,7 +20,7 @@ project "Client"
     language  "C++"
     cppdialect  "C++20"
     systemversion "latest"
-    staticruntime "on"
+    staticruntime "off"
 
     targetdir  ("bin/" .. outputdir.. "-%{prj.name}")
     objdir  ("bin-int/" .. outputdir .. "-%{prj.name}")
@@ -30,7 +30,7 @@ project "Client"
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp"
     }
-
+    
     links
     {
         "Engine"
@@ -45,13 +45,12 @@ project "Client"
     filter "configurations:Debug"
         kind  "ConsoleApp"
         defines { "_DEBUG" }
-        symbols "On"
         runtime "Debug"
 
     filter "configurations:Release"
+        -- kind  "ConsoleApp"
         kind  "WindowedApp"
         defines { "NDEBUG" }
-        optimize "On"
         runtime "Release"
 
 project "Engine"
@@ -60,7 +59,7 @@ project "Engine"
     kind  "StaticLib"
     cppdialect  "C++20"
     systemversion "latest"
-    staticruntime "on"
+    staticruntime "off"
 
     pchheader "Core/KRMpch.h"
 	pchsource "%{prj.name}/src/Core/KRMpch.cpp"
@@ -74,9 +73,15 @@ project "Engine"
         "%{prj.name}/src/**.cpp"
     }
 
+    libdirs
+    {
+        "vendor/GLFW/lib"
+    }
+
     links 
     {
-        "GLFW"
+        "opengl32.lib",
+        "glfw3.lib"
     }
     
     includedirs
@@ -87,13 +92,8 @@ project "Engine"
 
     filter "configurations:Debug"
         defines { "_DEBUG" }
-        symbols "On"
         runtime "Debug"
 
     filter "configurations:Release"
         defines { "NDEBUG" }
-        optimize "On"
         runtime "Release"
-
-group "Dependencies"
-    include "vendor/GLFW"
