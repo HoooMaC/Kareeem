@@ -14,7 +14,10 @@ startproject "Client"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "vendor/GLFW/include"
+IncludeDir["GLEW"] = "vendor/GLEW/include"
 IncludeDir["spdlog"] = "vendor/spdlog/include"
+IncludeDir["glm"] = "vendor/glm"
+IncludeDir["stb_image"] = "vendor/stb_image"
 
 project "Client"
     location "Client"
@@ -41,7 +44,10 @@ project "Client"
     {
         "Engine/src",
         "%{IncludeDir.GLFW}",
-        "%{IncludeDir.spdlog}"
+        "%{IncludeDir.GLEW}",
+        "%{IncludeDir.spdlog}",
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.stb_image}"
     }
 
     filter "configurations:Debug"
@@ -77,20 +83,25 @@ project "Engine"
 
     libdirs
     {
-        "vendor/GLFW/lib"
+        "vendor/GLFW/lib",
+        "vendor/GLEW/lib"
     }
 
     links 
     {
         "opengl32.lib",
-        "glfw3.lib"
+        "glfw3.lib",
+        "glew32s.lib"
     }
     
     includedirs
     {
         "Engine/src",
         "%{IncludeDir.GLFW}",
-        "%{IncludeDir.spdlog}"
+        "%{IncludeDir.GLEW}",
+        "%{IncludeDir.spdlog}",
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.stb_image}"
     }
 
     filter "configurations:Debug"

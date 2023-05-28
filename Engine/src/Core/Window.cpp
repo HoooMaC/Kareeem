@@ -32,13 +32,24 @@ namespace krm {
 					}
 				);
 			}
+
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 			s_GLFWInitialized = true;
+
 		}
 
 		m_Window = glfwCreateWindow((int)prop.Width, (int)prop.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_Window);
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		setVSync(true);
+
+		KRM_LOG_CLIENT_INFO(glGetString(GL_VERSION));
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		// Set GLFW callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
@@ -142,12 +153,6 @@ namespace krm {
 			glfwSwapInterval(0);
 
 		m_Data.VSync = enable;
-	}
-
-	void Window::setColor(float r, float g, float b, float a)
-	{
-		glClearColor(r, g, b, a);
-		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
 }

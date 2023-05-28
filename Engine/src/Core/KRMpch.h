@@ -18,3 +18,7 @@
 #include <set>
 #include <unordered_set>
 #include <array>
+
+//math library
+#include "glm.hpp"
+#include "gtc\matrix_transform.hpp"
