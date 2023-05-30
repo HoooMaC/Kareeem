@@ -22,7 +22,7 @@ namespace krm {
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 	private:
-		Window myWindow;
+		//Window myWindow;
 		bool m_Running = true;
 	private:
 	};

@@ -35,11 +35,6 @@ project "Client"
         "%{prj.name}/src/**.cpp"
     }
     
-    links
-    {
-        "Engine"
-    }
-
     includedirs
     {
         "Engine/src",
@@ -50,6 +45,11 @@ project "Client"
         "%{IncludeDir.stb_image}"
     }
 
+    links 
+    {
+        "Engine"
+    }
+    
     filter "configurations:Debug"
         kind  "ConsoleApp"
         defines { "_DEBUG", "KRM_ENABLE_LOG" }
@@ -105,9 +105,9 @@ project "Engine"
     }
 
     filter "configurations:Debug"
-        defines { "_DEBUG", "KRM_ENABLE_LOG" }
+        defines { "_DEBUG", "KRM_ENABLE_LOG", "GLEW_STATIC" }
         runtime "Debug"
 
     filter "configurations:Release"
-        defines { "NDEBUG" }
+        defines { "NDEBUG", "GLEW_STATIC" }
         runtime "Release"

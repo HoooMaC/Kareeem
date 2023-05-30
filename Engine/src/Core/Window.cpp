@@ -6,6 +6,7 @@
 #include "Events\MouseEvent.h"
 #include "Events\ApplicationEvent.h"
 
+#define GLFW_INCLUDE_NONE
 #include <GLFW\glfw3.h>
 
 namespace krm {
@@ -18,38 +19,34 @@ namespace krm {
 		m_Data.Width = prop.Width;
 		m_Data.Height = prop.Height;
 
-		KRM_LOG_CORE_INFO("Creating window {0} ({1}, {2})", prop.Title, prop.Width, prop.Height);
+		//KRM_LOG_CORE_INFO("Creating window {0} ({1}, {2})", prop.Title, prop.Width, prop.Height);
 
-		if (!s_GLFWInitialized)
-		{
-			// TODO: glfwTerminate on system shutdown
-			if(!glfwInit())
-			{
-				glfwSetErrorCallback([](int error, const char* message) 
-					{ 
-						KRM_LOG_CORE_ERROR("Failed to Initialized GLFW");
-						KRM_LOG_CORE_ERROR("GLFW Error : ({0}), ({1})", error, message);
-					}
-				);
-			}
+		//if (!s_GLFWInitialized)
+		//{
+		//	// TODO: glfwTerminate on system shutdown
+		//	if(!glfwInit())
+		//	{
+		//		glfwSetErrorCallback([](int error, const char* message) 
+		//			{ 
+		//				KRM_LOG_CORE_ERROR("Failed to Initialized GLFW");
+		//				KRM_LOG_CORE_ERROR("GLFW Error : ({0}), ({1})", error, message);
+		//			}
+		//		);
+		//	}
 
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		//	s_GLFWInitialized = true;
 
-			s_GLFWInitialized = true;
+		//}
 
-		}
+		//m_Window = glfwCreateWindow((int)prop.Width, (int)prop.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		//glfwMakeContextCurrent(m_Window);
+		//glfwSetWindowUserPointer(m_Window, &m_Data);
+		//setVSync(true);
 
-		m_Window = glfwCreateWindow((int)prop.Width, (int)prop.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_Window);
-		glfwSetWindowUserPointer(m_Window, &m_Data);
-		setVSync(true);
+		//KRM_LOG_CORE_INFO(glGetString(GL_VERSION));
 
-		KRM_LOG_CLIENT_INFO(glGetString(GL_VERSION));
-
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		// Set GLFW callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)

@@ -15,31 +15,17 @@ namespace krm {
 		unsigned int m_RendererID = 0;
 	};
 
+
+
 	template<typename T>
 	class Buffer
 	{
 	public:
 		virtual void clearData() { m_Data.clear(); }
 		virtual void setData() = 0;
-	public:
+		inline virtual std::vector<T>& getData() { return m_Data; }
+	protected:
 		std::vector<T> m_Data;
-	private:
-	};
-
-	/// ////////////////////////////////////////////////////////////////////
-	///  Vertex Array
-	/// ////////////////////////////////////////////////////////////////////
-
-	class VertexArray : public OpenGL
-	{
-	public:
-		VertexArray();
-		~VertexArray();
-
-		void setVertexArray();
-
-		void bind() const override;
-		void unbind() const override;
 	};
 
 	/// ////////////////////////////////////////////////////////////////////
@@ -77,4 +63,5 @@ namespace krm {
 
 		inline unsigned int GetCount() const { return m_Data.size(); }
 	};
+
 }

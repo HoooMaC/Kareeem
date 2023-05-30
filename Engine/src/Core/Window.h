@@ -30,13 +30,13 @@ namespace krm {
 		~Window();
 		void onUpdate();
 		void setVSync(bool enabled);
-		void setColor(float r, float g, float b, float a);
 
 		inline void setEventCallback(const EventCallbackFn& callback) { m_Data.EventCallback = callback; }
 
 		inline unsigned int getWidth() const { return m_Data.Width; }
 		inline unsigned int getHeight() const { return m_Data.Height; }
 
+		inline void* getNativeWindow() { return m_Window; }
 	private:
 		struct WindowData
 		{
