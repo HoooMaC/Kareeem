@@ -34,19 +34,85 @@ namespace krm {
 		KRM_LOG_CORE_INFO("Shader with Id : {0} has been unbound", m_RendererID);
 	}
 
+	void Shader::bindAndUploadUniform() const
+	{
+		glUseProgram(m_RendererID);
+
+		int countUniform = 0;
+		for (auto& uniform : m_UniformList)
+		{
+			uploadUniform(uniform);
+			countUniform++;
+		}
+
+		KRM_LOG_CORE_INFO("Shader with Id : {0} has been unbound and {1} uniform has been uploaded", m_RendererID, countUniform);
+	}
+
+	void Shader::addNewUniform(const std::string& variable, UniformType type, uint8_t count, const void* data)
+	{
+		auto it = std::find(m_UniformList.begin(), m_UniformList.end(), variable);
+
+		if (it != m_UniformList.end())
+		{
+			size_t index = std::distance(m_UniformList.begin(), it);
+			m_UniformList[index].data = data;
+			KRM_LOG_CORE_INFO("Uniform with name {0} in Shader {1} already exist, updating the data", variable, m_RendererID);
+			return;
+		}
+
+		UniformData temp;
+		temp.name = variable;
+		temp.type = type;
+		temp.count = count;
+		temp.data = data;
+		temp.location = getUniformLoc(variable);
+		m_UniformList.push_back(temp);
+
+		KRM_LOG_CORE_INFO("New uniform with name {0} in Shader with Id {1} has been uploaded", temp.name, m_RendererID);
+
+	}
+
+	void Shader::uploadUniform(UniformData uniform) const
+	{
+		switch (uniform.type)
+		{
+		case UniformType::NONE:		ASSERT(false); return;
+		case UniformType::Float:	return glUniform1fv(uniform.location, uniform.count, (const float*)uniform.data);
+		case UniformType::Float2:	return glUniform2fv(uniform.location, uniform.count, (const float*)uniform.data);
+		case UniformType::Float3:	return glUniform3fv(uniform.location, uniform.count, (const float*)uniform.data);
+		case UniformType::Float4:	return glUniform4fv(uniform.location, uniform.count, (const float*)uniform.data);
+		case UniformType::Mat2f:	return glUniformMatrix2fv(uniform.location, uniform.count, GL_FALSE, (const float*)uniform.data);
+		case UniformType::Mat3f:	return glUniformMatrix3fv(uniform.location, uniform.count, GL_FALSE, (const float*)uniform.data);
+		case UniformType::Mat4f:	return glUniformMatrix4fv(uniform.location, uniform.count, GL_FALSE, (const float*)uniform.data);
+		default:					ASSERT(false); return;
+		}
+	}
+
+
+	int Shader::getUniformLoc(const std::string& variable)
+	{
+		int location = glGetUniformLocation(m_RendererID, variable.c_str());
+		if(location != -1)
+			return location;
+		else
+		{
+			KRM_LOG_CORE_ERROR("Uniform Name Doesn't Exist");
+			ASSERT(false);
+		}
+	}
 
 	void Shader::makeShader(const std::string& vertexFilepath, const std::string& fragmentFilepath)
 	{
 		m_vertexFilePath = vertexFilepath;
 		m_fragmentFilepath = fragmentFilepath;
 
-		ShaderSource source = readShader(vertexFilepath, fragmentFilepath);
+		auto[vertexSrc, fragmentSrc] = readShader(vertexFilepath, fragmentFilepath);
 
-		m_RendererID = createShader(source.vertexShader, source.fragmentShader);
+		m_RendererID = createShader(vertexSrc, fragmentSrc);
 		bind();
 	}
 
-	ShaderSource Shader::readShader(const std::string& vertexFilepath, const std::string& fragmentFilepath)
+	std::pair<std::string, std::string> Shader::readShader(const std::string& vertexFilepath, const std::string& fragmentFilepath)
 	{
 		std::ifstream vertexStream(vertexFilepath);
 		if (!vertexStream.is_open())

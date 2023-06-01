@@ -10,6 +10,8 @@ out vec2 v_texCoord;
 out float v_texIndex;
 out vec4 v_color;
 
+uniform vec4 u_Color;
+
 void main()
 {
 	gl_Position = vec4(position, 1.0);
@@ -18,6 +20,8 @@ void main()
 
 	if (texIndex == 0)
 		v_color = vec4(0.5 * (sin(position.x) + 1.0), 0.5 * (sin(position.y) + 1.0), 0.5 * (sin(position.z) + 1.0), 1.0);
+	else if(texIndex == 1)
+		v_color = u_Color;
 	else
 		v_color = vec4(0.4, 0.1, 0.9, 1.0);
 	//v_color = vec4(position, 1.0);

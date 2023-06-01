@@ -12,6 +12,8 @@
 
 #include "GLFW\glfw3.h"
 
+
+
 namespace krm {
 
 	App::App(const std::string& name, uint32_t width, uint32_t height)
@@ -36,9 +38,9 @@ namespace krm {
 	{
 
 		Vertex vertices[] = {
-			{ {-0.5f, -0.5f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }, 0.0f },
-			{ { 0.5f, -0.5f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }, 0.0f },
-			{ { 0.0f,  0.5f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f }, 0.0f }
+			{ {-0.5f, -0.5f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }, 1.0f },
+			{ { 0.5f, -0.5f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }, 1.0f },
+			{ { 0.0f,  0.5f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f }, 1.0f }
 		};
 
 		unsigned int indices[] = { 0,1,2 };
@@ -51,16 +53,24 @@ namespace krm {
 		m_VertexArray.addDatatoIndexBuffer(indices, 3);
 
 		m_VertexArray.unbind();
+
+
+		glm::vec4 u_Color({ 0.4f, 0.1f, 0.8f, 1.0f });
+		defaultShader.addNewUniform("u_Color", UniformType::Float4, 1, glm::value_ptr(u_Color));
 		while (m_Running)
 		{
 
 			RendererCommand::Clear();
-			//RendererCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 0.1f });
-			RendererCommand::setClearColor(glm::vec4(1.0));
+			RendererCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 0.1f });
 
 			Renderer::beginScene();
-
+			//shader. addUniform  --- yaaaa sesuatu yang seperti inilah
 			Renderer::draw(defaultShader, m_VertexArray);
+
+
+
+			//shader.flush --- untuk menghapus semua Uniform List (tapi ini optional)
+			//bisa juga pake check condition apabila shader udah ada maka hanya perlu updata data atau tidak lakukan apa-apa
 
 			Renderer::endScene();
 
