@@ -22,10 +22,13 @@ namespace krm {
 		void unbind() const override;
 
 	//	void setVertexBuffer();
-	//	void setIndexBuffer();
-	//private:
-	//	VertexBuffer m_VertexBuffer;
-	//	IndexBuffer m_IndexBuffer;
+		void addDatatoVertexBuffer(unsigned int index, Vertex* data, int count);
+		void addDatatoIndexBuffer(unsigned int* data, int count);
+
+		unsigned int getCount() const { return m_IndexBuffer.GetCount(); }
+	private:
+		std::vector<VertexBuffer> m_VertexBuffers;
+		IndexBuffer m_IndexBuffer;
 	};
 
 }

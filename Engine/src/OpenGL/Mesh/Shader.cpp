@@ -14,18 +14,26 @@ namespace krm {
 		makeShader(vertexFilepath, fragmentFilepath);
 	}
 
-	Shader::Shader()
-		: m_vertexFilePath(""), m_fragmentFilepath("")
-	{
-
-	}
-
 	Shader::~Shader()
 
 	{
 		glDeleteProgram(m_RendererID);
 		KRM_LOG_CORE_INFO("Shader has with Id : {0} been deleted", m_RendererID);
 	}
+
+	void Shader::bind() const
+	{
+		glUseProgram(m_RendererID);
+
+		KRM_LOG_CORE_INFO("Shader with Id : {0} has been bound", m_RendererID);
+	}
+
+	void Shader::unbind() const
+	{
+		glUseProgram(0);
+		KRM_LOG_CORE_INFO("Shader with Id : {0} has been unbound", m_RendererID);
+	}
+
 
 	void Shader::makeShader(const std::string& vertexFilepath, const std::string& fragmentFilepath)
 	{
@@ -36,40 +44,6 @@ namespace krm {
 
 		m_RendererID = createShader(source.vertexShader, source.fragmentShader);
 		bind();
-	}
-
-	void Shader::uniform4f(const std::string& variable, float f1, float f2, float f3, float f4)
-	{
-		glUniform4f(getUniformLocation(variable), f1, f2, f3, f4);
-	}
-
-	void Shader::uniformMat4f(const std::string& variable, const glm::mat4& matrix)
-	{
-		glUniformMatrix4fv(getUniformLocation(variable), 1, GL_FALSE, &matrix[0][0]);
-	}
-
-	void Shader::uniform1iv(const std::string& variable, const int count, const int* value)
-	{
-		int loc = getUniformLocation(variable);
-		glUniform1iv(loc, count, value);
-	}
-
-	void Shader::uniform1i(const std::string& variable, int i)
-	{
-		int loc = getUniformLocation(variable);
-		glUniform1i(loc, i);
-	}
-
-	void Shader::bind() const
-	{
-		glUseProgram(m_RendererID);
-		KRM_LOG_CORE_INFO("Shader with Id : {0} has been bound", m_RendererID);
-	}
-
-	void Shader::unbind() const
-	{
-		glUseProgram(0);
-		KRM_LOG_CORE_INFO("Shader with Id : {0} has been unbound", m_RendererID);
 	}
 
 	ShaderSource Shader::readShader(const std::string& vertexFilepath, const std::string& fragmentFilepath)
@@ -150,24 +124,6 @@ namespace krm {
 		KRM_LOG_CORE_INFO("Shader program has been created succesfully with Id : {0}", program);
 
 		return program;
-	}
-
-	int Shader::getUniformLocation(const std::string& name)
-	{
-		if (m_Uniform.find(name) != m_Uniform.end())
-		{
-			return m_Uniform[name];
-		}
-
-		int location = glGetUniformLocation(m_RendererID, name.c_str());
-
-		if (location == -1)
-		{
-			KRM_LOG_CORE_ERROR("Warning : uniform {0} doesn't exist", name);
-		}
-
-		m_Uniform[name] = location;
-		return location;
 	}
 
 }

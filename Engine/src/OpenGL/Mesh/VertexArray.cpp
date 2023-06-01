@@ -16,6 +16,9 @@ namespace krm {
 		glGenVertexArrays(1, &m_RendererID);
 		glBindVertexArray(m_RendererID);
 		KRM_LOG_CORE_INFO("Vertex Array has been generated and bound succesfully with Id : {0}", m_RendererID);
+
+		VertexBuffer newVertexBuffer;
+		m_VertexBuffers.push_back(newVertexBuffer);
 	}
 
 	VertexArray::~VertexArray()
@@ -54,12 +57,18 @@ namespace krm {
 		KRM_LOG_CORE_INFO("Vertex Array with Id : {0} has been unbound", m_RendererID);
 	}
 
-	//void VertexArray::setVertexBuffer()
-	//{
-	//}
+	void VertexArray::addDatatoVertexBuffer(unsigned int index, Vertex* data, int count)
+	{
+		m_VertexBuffers[index].bind();
+		m_VertexBuffers[index].inputData(data, 3);
+		m_VertexBuffers[index].setData();
+	}
 
-	//void VertexArray::setIndexBuffer()
-	//{
-	//}
+	void VertexArray::addDatatoIndexBuffer(unsigned int* data, int count)
+	{
+		m_IndexBuffer.bind();
+		m_IndexBuffer.inputData(data, 3);
+		m_IndexBuffer.setData();
+	}
 
 }

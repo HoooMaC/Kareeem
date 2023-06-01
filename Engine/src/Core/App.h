@@ -29,7 +29,6 @@ namespace krm {
 		bool m_Running = true;
 		VertexArray m_VertexArray;
 		VertexBuffer m_VertexBuffer;
-		IndexBuffer m_IndexBuffer;
 	};
 
 }

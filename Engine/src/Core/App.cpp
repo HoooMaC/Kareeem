@@ -3,6 +3,8 @@
 #include "Core\App.h"
 #include "Core\Core.h"
 #include "Core\Log.h"
+#include "Core\Renderer\Renderer.h"
+#include "Core\Renderer\RendererCommand.h"
 
 #include "OpenGL\Mesh\Shader.h"
 
@@ -34,50 +36,33 @@ namespace krm {
 	{
 
 		Vertex vertices[] = {
-			{ {-0.5f, -0.5f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }, 1.0f },
-			{ { 0.5f, -0.5f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }, 1.0f },
-			{ { 0.0f,  0.5f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f }, 1.0f }
+			{ {-0.5f, -0.5f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }, 0.0f },
+			{ { 0.5f, -0.5f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }, 0.0f },
+			{ { 0.0f,  0.5f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f }, 0.0f }
 		};
 
 		unsigned int indices[] = { 0,1,2 };
 
 		Shader defaultShader("Resource/Shader/default/default.vert.shader", "Resource/Shader/default/default.frag.shader");
 
-		m_VertexArray.bind();
 		m_VertexArray.setVertexArray();
 
-		m_VertexBuffer.bind();
-		m_VertexBuffer.inputData(vertices, 3);
-		m_VertexBuffer.setData();
-
-
-		m_IndexBuffer.bind();
-		m_IndexBuffer.inputData(indices, 3);
-		m_IndexBuffer.setData();
+		m_VertexArray.addDatatoVertexBuffer(0, vertices, 3);
+		m_VertexArray.addDatatoIndexBuffer(indices, 3);
 
 		m_VertexArray.unbind();
-
-
 		while (m_Running)
 		{
-			//RendererCommand::ClearColor(0.1f, 0.1f, 0.1f, 0.1f);
-			glClear(GL_COLOR_BUFFER_BIT);
-			glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
 
-			//Renderer::BeginScene();
+			RendererCommand::Clear();
+			//RendererCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 0.1f });
+			RendererCommand::setClearColor(glm::vec4(1.0));
 
+			Renderer::beginScene();
 
-			m_VertexArray.bind();
-			defaultShader.bind();
+			Renderer::draw(defaultShader, m_VertexArray);
 
-
-			//Renderer::Submit();
-			glDrawElements(GL_TRIANGLES, m_IndexBuffer.GetCount(), GL_UNSIGNED_INT, nullptr);
-
-
-
-
-			//Renderer::EndScene();
+			Renderer::endScene();
 
 			myWindow.onUpdate();
 		}
