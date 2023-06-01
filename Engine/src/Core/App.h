@@ -8,6 +8,9 @@
 #include "Events\KeyEvent.h"
 #include "Events\MouseEvent.h"
 
+#include "OpenGL\Mesh\VertexArray.h"
+#include "OpenGL\Mesh\Buffer.h"
+
 namespace krm {
 
 	class App
@@ -22,9 +25,11 @@ namespace krm {
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 	private:
-		//Window myWindow;
+		Window myWindow;
 		bool m_Running = true;
-	private:
+		VertexArray m_VertexArray;
+		VertexBuffer m_VertexBuffer;
+		IndexBuffer m_IndexBuffer;
 	};
 
 }

@@ -48,6 +48,11 @@ namespace krm {
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeVBO, m_Data.data());
 	}
 
+	void VertexBuffer::inputData(Vertex* data, int count)
+	{
+		m_Data.insert(m_Data.end(), data, data + count);
+	}
+
 	void VertexBuffer::clearData()
 	{
 		m_Data.clear();
@@ -91,6 +96,11 @@ namespace krm {
 	{
 		m_Data.clear();
 		KRM_LOG_CORE_INFO("All of the index buffer with Id : {0} has been cleared", m_RendererID);
+	}
+
+	void IndexBuffer::inputData(unsigned int* data, int count)
+	{
+		m_Data.insert(m_Data.end(), data, data + count);
 	}
 
 	void IndexBuffer::setData()

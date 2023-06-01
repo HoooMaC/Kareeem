@@ -21,6 +21,7 @@ IncludeDir["stb_image"] = "vendor/stb_image"
 
 project "Client"
     location "Client"
+    debugdir "%{wks.location}/Assets"
     language  "C++"
     cppdialect  "C++20"
     systemversion "latest"

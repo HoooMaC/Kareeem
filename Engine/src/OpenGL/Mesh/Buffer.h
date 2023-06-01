@@ -43,6 +43,8 @@ namespace krm {
 
 		void clearData() override;
 		void setData() override;
+
+		void inputData(Vertex* data, int count);
 	};
 
 	/// ////////////////////////////////////////////////////////////////////
@@ -60,6 +62,8 @@ namespace krm {
 
 		void clearData() override;
 		void setData() override;
+
+		void inputData(unsigned int* data, int count);
 
 		inline unsigned int GetCount() const { return m_Data.size(); }
 	};

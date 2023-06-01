@@ -6,7 +6,7 @@
 #include "Events\MouseEvent.h"
 #include "Events\ApplicationEvent.h"
 
-#define GLFW_INCLUDE_NONE
+#include <GLEW\glew.h>
 #include <GLFW\glfw3.h>
 
 namespace krm {
@@ -19,34 +19,43 @@ namespace krm {
 		m_Data.Width = prop.Width;
 		m_Data.Height = prop.Height;
 
-		//KRM_LOG_CORE_INFO("Creating window {0} ({1}, {2})", prop.Title, prop.Width, prop.Height);
+		KRM_LOG_CORE_INFO("Creating window {0} ({1}, {2})", prop.Title, prop.Width, prop.Height);
 
-		//if (!s_GLFWInitialized)
-		//{
-		//	// TODO: glfwTerminate on system shutdown
-		//	if(!glfwInit())
-		//	{
-		//		glfwSetErrorCallback([](int error, const char* message) 
-		//			{ 
-		//				KRM_LOG_CORE_ERROR("Failed to Initialized GLFW");
-		//				KRM_LOG_CORE_ERROR("GLFW Error : ({0}), ({1})", error, message);
-		//			}
-		//		);
-		//	}
+		if (!s_GLFWInitialized)
+		{
+			// TODO: glfwTerminate on system shutdown
+			if(!glfwInit())
+			{
+				glfwSetErrorCallback([](int error, const char* message) 
+					{ 
+						KRM_LOG_CORE_ERROR("Failed to Initialized GLFW");
+						KRM_LOG_CORE_ERROR("GLFW Error : ({0}), ({1})", error, message);
+					}
+				);
+			}
 
-		//	s_GLFWInitialized = true;
+		}
 
-		//}
+		m_Window = glfwCreateWindow((int)prop.Width, (int)prop.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		glfwMakeContextCurrent(m_Window);
+		glfwSetWindowUserPointer(m_Window, &m_Data);
+		setVSync(true);
 
-		//m_Window = glfwCreateWindow((int)prop.Width, (int)prop.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		//glfwMakeContextCurrent(m_Window);
-		//glfwSetWindowUserPointer(m_Window, &m_Data);
-		//setVSync(true);
+		if (!s_GLFWInitialized)
+		{
 
-		//KRM_LOG_CORE_INFO(glGetString(GL_VERSION));
+			if (glewInit() != GLEW_OK)
+			{
+				KRM_LOG_CORE_ERROR("Error to initialized GLEW");
+			}
 
-		//glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			s_GLFWInitialized = true;
+		}
+
+		KRM_LOG_CORE_INFO("{}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		// Set GLFW callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
@@ -110,7 +119,7 @@ namespace krm {
 					MouseButtonReleasedEvent event(button);
 					data.EventCallback(event);
 					break;
-			}
+				}
 			}
 		});
 

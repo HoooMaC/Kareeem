@@ -21,11 +21,11 @@ namespace krm {
 		void bind() const override;
 		void unbind() const override;
 
-		void setVertexBuffer();
-		void setIndexBuffer();
-	private:
-		VertexBuffer m_VertexBuffer;
-		IndexBuffer m_IndexBuffer;
+	//	void setVertexBuffer();
+	//	void setIndexBuffer();
+	//private:
+	//	VertexBuffer m_VertexBuffer;
+	//	IndexBuffer m_IndexBuffer;
 	};
 
 }

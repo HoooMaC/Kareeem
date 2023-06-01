@@ -54,12 +54,12 @@ namespace krm {
 		KRM_LOG_CORE_INFO("Vertex Array with Id : {0} has been unbound", m_RendererID);
 	}
 
-	void VertexArray::setVertexBuffer()
-	{
-	}
+	//void VertexArray::setVertexBuffer()
+	//{
+	//}
 
-	void VertexArray::setIndexBuffer()
-	{
-	}
+	//void VertexArray::setIndexBuffer()
+	//{
+	//}
 
 }
