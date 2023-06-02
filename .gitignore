@@ -1,9 +1,15 @@
-
-.vs/Opengl(64-bit)/FileContentIndex/*.vsidx
-.vs/
+## Output From Project and Solution
 bin/
 bin-int/
+
+## Visual Studio File
+.vs/
+.vs/Opengl(64-bit)/FileContentIndex/*.vsidx
 Kareeem.sln
 **.user
 **.filters
 **.vcxproj
+
+## From imgui
+Assets/imgui.ini
+Assets/imgui_log.txt

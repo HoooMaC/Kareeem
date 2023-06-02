@@ -50,7 +50,6 @@ project "Client"
 
     links 
     {
-        "Imgui",
         "Engine"
     }
     
@@ -60,7 +59,6 @@ project "Client"
         runtime "Debug"
 
     filter "configurations:Release"
-        -- kind  "ConsoleApp"
         kind  "WindowedApp"
         defines { "NDEBUG" }
         runtime "Release"
