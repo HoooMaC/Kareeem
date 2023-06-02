@@ -32,6 +32,13 @@ namespace krm {
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(App::OnWindowClose));
 
 		KRM_LOG_CORE_TRACE("{0}", e);
+
+		for (auto it = m_LayerStack.rend(); it != m_LayerStack.rbegin(); ++it )
+		{
+			(*it)->OnEvent(e);
+			if (e.Handled)
+				break;
+		}
 	}
 
 	void App::run()
@@ -64,6 +71,7 @@ namespace krm {
 			RendererCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 0.1f });
 
 			Renderer::beginScene();
+
 			//shader. addUniform  --- yaaaa sesuatu yang seperti inilah
 			Renderer::draw(defaultShader, m_VertexArray);
 
@@ -74,8 +82,21 @@ namespace krm {
 
 			Renderer::endScene();
 
+			for (Layer* layer : m_LayerStack)
+				layer->OnUpdate();
+
 			myWindow.onUpdate();
 		}
+	}
+
+	void App::PushLayer(Layer* layer)
+	{
+		m_LayerStack.PushLayer(layer);
+	}
+
+	void App::PushOverlay(Layer* layer)
+	{
+		m_LayerStack.PushOverlay(layer);
 	}
 
 	bool App::OnWindowClose(WindowCloseEvent& e)
