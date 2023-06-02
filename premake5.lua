@@ -13,11 +13,12 @@ outputdir = "%{cfg.buildcfg}-%{cfg.architecture}"
 startproject "Client"
 
 IncludeDir = {}
-IncludeDir["GLFW"] = "vendor/GLFW/include"
-IncludeDir["GLEW"] = "vendor/GLEW/include"
-IncludeDir["spdlog"] = "vendor/spdlog/include"
-IncludeDir["glm"] = "vendor/glm"
-IncludeDir["stb_image"] = "vendor/stb_image"
+IncludeDir["GLFW"] = "%{wks.location}/vendor/GLFW/include"
+IncludeDir["GLEW"] = "%{wks.location}/vendor/GLEW/include"
+IncludeDir["spdlog"] = "%{wks.location}/vendor/spdlog/include"
+IncludeDir["glm"] = "%{wks.location}/vendor/glm"
+IncludeDir["stb_image"] = "%{wks.location}/vendor/stb_image"
+IncludeDir["imgui"] = "%{wks.location}/vendor/imgui"
 
 project "Client"
     location "Client"
@@ -43,11 +44,13 @@ project "Client"
         "%{IncludeDir.GLEW}",
         "%{IncludeDir.spdlog}",
         "%{IncludeDir.glm}",
-        "%{IncludeDir.stb_image}"
+        "%{IncludeDir.stb_image}",
+        "%{IncludeDir.imgui}"
     }
 
     links 
     {
+        "Imgui",
         "Engine"
     }
     
@@ -90,6 +93,7 @@ project "Engine"
 
     links 
     {
+        "imgui",
         "opengl32.lib",
         "glfw3.lib",
         "glew32s.lib"
@@ -102,7 +106,8 @@ project "Engine"
         "%{IncludeDir.GLEW}",
         "%{IncludeDir.spdlog}",
         "%{IncludeDir.glm}",
-        "%{IncludeDir.stb_image}"
+        "%{IncludeDir.stb_image}",
+        "%{IncludeDir.imgui}"
     }
 
     filter "configurations:Debug"
@@ -112,3 +117,6 @@ project "Engine"
     filter "configurations:Release"
         defines { "NDEBUG", "GLEW_STATIC" }
         runtime "Release"
+
+group "Dependencies"
+    include "vendor/imgui"

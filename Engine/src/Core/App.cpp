@@ -20,6 +20,7 @@ namespace krm {
 		: myWindow({name, width, height})
 	{
 		myWindow.setEventCallback(BIND_EVENT_FN(App::eventHandle));
+		m_Window = (GLFWwindow*)myWindow.getNativeWindow();
 	}
 
 	App::~App()
