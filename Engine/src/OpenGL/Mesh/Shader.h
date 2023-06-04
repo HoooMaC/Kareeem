@@ -5,6 +5,7 @@
 
 #include "OpenGL/Mesh/Buffer.h"
 
+#include <GLEW/glew.h>
 namespace krm {
 
 	enum class UniformType : uint8_t
@@ -12,22 +13,33 @@ namespace krm {
 		NONE = 0, Float, Float2, Float3, Float4, Mat2f, Mat3f, Mat4f
 	};
 
+	struct UniformData
+	{
+		GLenum m_type;
+		int m_count;
+		int m_location;
+		const void* m_data;
+
+		UniformData(GLenum type, int count)
+			: m_type(type), m_count(count), m_location(-1), m_data(nullptr)
+		{
+		}
+		UniformData()
+			: m_type(0), m_count(1), m_location(-1), m_data(nullptr)
+		{
+		}
+
+		UniformData(const UniformData& other)
+			: m_type(other.m_type), m_count(other.m_count), m_location(other.m_location), m_data(other.m_data)
+		{
+		}
+
+	};
+
 	class Shader : public OpenGL
 	{
 	private:
-		struct UniformData
-		{
-			std::string name;
-			UniformType type;
-			uint8_t count;
-			int location;
-			const void* data;
 
-			bool operator==(std::string other)
-			{
-				return name == other;
-			}
-		};
 	public:
 		Shader(const std::string& vertexFilepath, const std::string& fragmentFilepath);
 		~Shader();
@@ -36,9 +48,8 @@ namespace krm {
 		void unbind() const override;
 
 		void bindAndUploadUniform() const;
-		void uploadUniform(UniformData uniform) const;
 
-		void addNewUniform(const std::string& variable, UniformType type, uint8_t count, const void* data);
+		void uploadUniform(const char* variable, const void* data);
 
 	private:
 
@@ -51,7 +62,7 @@ namespace krm {
 
 	private:
 		std::string m_vertexFilePath, m_fragmentFilepath;
-		std::vector<UniformData> m_UniformList;
+		std::unordered_map<std::string, UniformData> m_UniformList;
 	};
 
 }

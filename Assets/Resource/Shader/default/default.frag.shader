@@ -6,17 +6,9 @@ in vec4 v_color;
 in vec2 v_texCoord;
 in float v_texIndex;
 
-uniform sampler2D uTexture[32];
-
+in float v_arrray[3];
 
 void main()
 {
-	int index = int(v_texIndex);
-	//if (index == 0)
-		color = v_color;
-	//else
-	//{
-		//color = 
-		//color = texture(uTexture[index], v_texCoord);
-	//}
+	color = vec4(v_color.x, v_color.y, v_arrray[0], v_arrray[1]);
 }

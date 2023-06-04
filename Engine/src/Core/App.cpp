@@ -7,8 +7,13 @@
 #include "Core\Renderer\RendererCommand.h"
 
 #include "OpenGL\Mesh\Shader.h"
+#include "OpenGL\OpenGLContext.h"
 
 #include "Events\Event.h"
+
+#include <imgui.h>
+#include <backends/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_glfw.h>
 
 namespace krm {
 
@@ -50,16 +55,25 @@ namespace krm {
 
 		Shader defaultShader("Resource/Shader/default/default.vert.shader", "Resource/Shader/default/default.frag.shader");
 
+		glm::vec4 Color({ 1.0f, 0.1f, 0.8f, 1.0f });
+
+		glm::mat4 projection = glm::ortho(0.0f, 3.2f * 3, 0.0f, 1.8f * 3);
+
+		glm::mat4 view(0.5f);
+		glm::vec3 position(1.0f);
+		glm::mat4 model = glm::translate(glm::mat4(1.0f), position);
+		glm::mat4 pv = projection * view * model;
+
+		float arrray[3] = { 1,1,1 };
+		defaultShader.uploadUniform("u_Color", glm::value_ptr(Color));
+		defaultShader.uploadUniform("pv", glm::value_ptr(pv));
+		defaultShader.uploadUniform("arrray", arrray);
+
 		m_VertexArray.setVertexArray();
 
 		m_VertexArray.addDatatoVertexBuffer(0, vertices, 3);
 		m_VertexArray.addDatatoIndexBuffer(indices, 3);
 
-		//m_VertexArray.unbind();
-
-
-		glm::vec4 u_Color({ 0.4f, 0.1f, 0.8f, 1.0f });
-		defaultShader.addNewUniform("u_Color", UniformType::Float4, 1, glm::value_ptr(u_Color));
 		while (m_Running)
 		{
 
@@ -82,6 +96,7 @@ namespace krm {
 				layer->OnUpdate();
 
 			m_Window->onUpdate();
+
 		}
 	}
 

@@ -16,7 +16,8 @@ namespace krm {
 
 	void Renderer::draw(const Shader& shader, const VertexArray& vertexArray)
 	{
-		shader.bindAndUploadUniform();
+		shader.bind();
+		//shader.bindAndUploadUniform();
 
 		vertexArray.bind();
 		glDrawElements(GL_TRIANGLES, vertexArray.getCount(), GL_UNSIGNED_INT, nullptr);

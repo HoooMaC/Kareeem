@@ -11,18 +11,21 @@ out float v_texIndex;
 out vec4 v_color;
 
 uniform vec4 u_Color;
+uniform mat4 pv;
+
+uniform float arrray[3];
+out float v_arrray[3];
 
 void main()
 {
-	gl_Position = vec4(position, 1.0);
+	gl_Position = pv * vec4(position, 1.0);
 	v_texCoord = texCoord;
 	v_texIndex = texIndex;
 
-	if (texIndex == 0)
-		v_color = vec4(0.5 * (sin(position.x) + 1.0), 0.5 * (sin(position.y) + 1.0), 0.5 * (sin(position.z) + 1.0), 1.0);
-	else if(texIndex == 1)
-		v_color = u_Color;
-	else
-		v_color = vec4(0.4, 0.1, 0.9, 1.0);
-	//v_color = vec4(position, 1.0);
+	v_color = vec4(0.5 * (sin(position.x) + 1.0), 0.5 * (sin(position.y) + 1.0), 0.5 * (sin(position.z) + 1.0), 1.0);
+	v_color = u_Color;
+
+	v_arrray[0] = arrray[0];
+	v_arrray[1] = arrray[1];
+	v_arrray[2] = arrray[2]; 
 }

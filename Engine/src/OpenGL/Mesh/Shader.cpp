@@ -12,6 +12,23 @@ namespace krm {
 		: m_vertexFilePath(vertexFilepath), m_fragmentFilepath(fragmentFilepath)
 	{
 		makeShader(vertexFilepath, fragmentFilepath);
+
+		//we can use glGetActiveUniform here
+		//getUniform()
+		int num_uniforms, maxUniformLength;
+		glGetProgramiv(m_RendererID, GL_ACTIVE_UNIFORMS, &num_uniforms);
+		glGetProgramiv(m_RendererID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxUniformLength);
+		//ini masih belum solid. Mungkin pakai vector tidak terlalu efektif
+		for (int i = 0; i < num_uniforms; i++)
+		{
+			GLchar* name = new char[maxUniformLength];
+			GLenum type;
+			int count;
+			GLsizei length;
+			glGetActiveUniform(m_RendererID, i, maxUniformLength * sizeof(char), &length, &count, &type, name);
+
+			m_UniformList[name] = UniformData(type, count);
+		}
 	}
 
 	Shader::~Shader()
@@ -38,54 +55,60 @@ namespace krm {
 	{
 		glUseProgram(m_RendererID);
 
-		int countUniform = 0;
-		for (auto& uniform : m_UniformList)
-		{
-			uploadUniform(uniform);
-			countUniform++;
-		}
+		//int countUniform = 0;
+		//for (auto& uniform : m_UniformList)
+		//{
+		//	uploadUniform(uniform);
+		//	countUniform++;
+		//}
 
-		KRM_LOG_CORE_INFO("Shader with Id : {0} has been unbound and {1} uniform has been uploaded", m_RendererID, countUniform);
+		//KRM_LOG_CORE_INFO("Shader with Id : {0} has been bound and {1} uniform has been uploaded", m_RendererID, countUniform);
 	}
 
-	void Shader::addNewUniform(const std::string& variable, UniformType type, uint8_t count, const void* data)
+	//need to change this function name
+	void Shader::uploadUniform(const char* variable, const void* data)
 	{
-		auto it = std::find(m_UniformList.begin(), m_UniformList.end(), variable);
-
-		if (it != m_UniformList.end())
+		//must fixed, if uniform is an array
+		std::string target = variable;
+		if (m_UniformList[target].m_count > 1)
 		{
-			size_t index = std::distance(m_UniformList.begin(), it);
-			m_UniformList[index].data = data;
-			KRM_LOG_CORE_INFO("Uniform with name {0} in Shader {1} already exist, updating the data", variable, m_RendererID);
+			if (target.find("[0]") == std::string::npos)
+			{
+				target.append("[0]");
+			}
+		}
+
+		if (m_UniformList.find(target) == m_UniformList.end())
+		{
+			KRM_LOG_CORE_ERROR("Variable not found");
+			ASSERT(false);
 			return;
 		}
 
-		UniformData temp;
-		temp.name = variable;
-		temp.type = type;
-		temp.count = count;
-		temp.data = data;
-		temp.location = getUniformLoc(variable);
-		m_UniformList.push_back(temp);
 
-		KRM_LOG_CORE_INFO("New uniform with name {0} in Shader with Id {1} has been uploaded", temp.name, m_RendererID);
+		m_UniformList[target].m_location = glGetUniformLocation(m_RendererID, target.c_str());
+		m_UniformList[target].m_data = data;
 
-	}
-
-	void Shader::uploadUniform(UniformData uniform) const
-	{
-		switch (uniform.type)
+		switch (m_UniformList[target].m_type)
 		{
-		case UniformType::NONE:		ASSERT(false); return;
-		case UniformType::Float:	return glUniform1fv(uniform.location, uniform.count, (const float*)uniform.data);
-		case UniformType::Float2:	return glUniform2fv(uniform.location, uniform.count, (const float*)uniform.data);
-		case UniformType::Float3:	return glUniform3fv(uniform.location, uniform.count, (const float*)uniform.data);
-		case UniformType::Float4:	return glUniform4fv(uniform.location, uniform.count, (const float*)uniform.data);
-		case UniformType::Mat2f:	return glUniformMatrix2fv(uniform.location, uniform.count, GL_FALSE, (const float*)uniform.data);
-		case UniformType::Mat3f:	return glUniformMatrix3fv(uniform.location, uniform.count, GL_FALSE, (const float*)uniform.data);
-		case UniformType::Mat4f:	return glUniformMatrix4fv(uniform.location, uniform.count, GL_FALSE, (const float*)uniform.data);
-		default:					ASSERT(false); return;
+		case GL_BOOL	   : return glUniform1iv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const int*)m_UniformList[target].m_data); 
+		case GL_INT		   : return glUniform1iv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const int*)m_UniformList[target].m_data); 
+		case GL_SAMPLER_2D : return glUniform1iv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const int*)m_UniformList[target].m_data);
+		case GL_INT_VEC2   : return glUniform2iv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const int*)m_UniformList[target].m_data); 
+		case GL_INT_VEC3   : return glUniform3iv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const int*)m_UniformList[target].m_data); 
+		case GL_INT_VEC4   : return glUniform4iv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const int*)m_UniformList[target].m_data); 
+		case GL_FLOAT	   : return glUniform1fv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const float*)m_UniformList[target].m_data); 
+		case GL_FLOAT_VEC2 : return glUniform2fv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const float*)m_UniformList[target].m_data); 
+		case GL_FLOAT_VEC3 : return glUniform3fv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const float*)m_UniformList[target].m_data); 
+		case GL_FLOAT_VEC4 : return glUniform4fv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const float*)m_UniformList[target].m_data); 
+		case GL_FLOAT_MAT2 : return glUniformMatrix2fv(m_UniformList[target].m_location, m_UniformList[target].m_count, GL_FALSE, (const float*)m_UniformList[target].m_data); 
+		case GL_FLOAT_MAT3 : return glUniformMatrix3fv(m_UniformList[target].m_location, m_UniformList[target].m_count, GL_FALSE, (const float*)m_UniformList[target].m_data); 
+		case GL_FLOAT_MAT4 : return glUniformMatrix4fv(m_UniformList[target].m_location, m_UniformList[target].m_count, GL_FALSE, (const float*)m_UniformList[target].m_data); 
 		}
+		KRM_LOG_CORE_ERROR("Uniform {} Type unknown", target);
+
+		ASSERT(false);
+		return;
 	}
 
 
@@ -162,9 +185,9 @@ namespace krm {
 
 			const char* shadertype = (type == GL_VERTEX_SHADER ? "vertex" : "fragment");
 			KRM_LOG_CORE_ERROR("Failed to compile [{0}] shader", shadertype);
-			/*std::cout << "Failed to compile "
-				<< (type == GL_VERTEX_SHADER ? "vertex " : "fragment ") << "shader\n" << message << "\n";*/
-
+			//std::cout << "Failed to compile "
+				//<< (type == GL_VERTEX_SHADER ? "vertex " : "fragment ") << "shader\n" << message << "\n";
+			KRM_LOG_CORE_ERROR("{}", message);
 			delete[] message;
 			glDeleteShader(id);
 			return 0;
