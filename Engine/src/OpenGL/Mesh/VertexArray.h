@@ -27,7 +27,7 @@ namespace krm {
 
 		unsigned int getCount() const { return m_IndexBuffer.GetCount(); }
 	private:
-		std::vector<VertexBuffer> m_VertexBuffers;
+		std::unique_ptr<VertexBuffer> m_VertexBuffers;
 		IndexBuffer m_IndexBuffer;
 	};
 

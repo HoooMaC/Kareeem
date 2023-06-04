@@ -14,33 +14,24 @@ namespace krm {
     {
     public:
         Log() {}
-        inline static std::shared_ptr<spdlog::logger>& getCoreLogger() { return s_LogCore; }
-        inline static std::shared_ptr<spdlog::logger>& getClientLogger() { return s_LogClient; }
 
-        static void Init() {
-            spdlog::set_pattern("%^[%T] %n: %v%$");
-            s_LogCore = spdlog::stdout_color_mt("CORE");
-            getCoreLogger()->set_level(spdlog::level::trace);
-
-            s_LogClient = spdlog::stdout_color_mt("APP");
-            getClientLogger()->set_level(spdlog::level::trace);
-        }
-    private:
+        static void Init();
+    public:
         static std::shared_ptr<spdlog::logger> s_LogCore;
         static std::shared_ptr<spdlog::logger> s_LogClient;
     };
 
 }
 
-#define KRM_LOG_CORE_TRACE(...) ::krm::Log::getCoreLogger()->trace(__VA_ARGS__);
-#define KRM_LOG_CORE_INFO(...)  ::krm::Log::getCoreLogger()->info(__VA_ARGS__);
-#define KRM_LOG_CORE_WARN(...)  ::krm::Log::getCoreLogger()->warn(__VA_ARGS__);
-#define KRM_LOG_CORE_ERROR(...) ::krm::Log::getCoreLogger()->error(__VA_ARGS__);
+#define KRM_LOG_CORE_TRACE(...) ::krm::Log::s_LogCore->trace(__VA_ARGS__);
+#define KRM_LOG_CORE_INFO(...)  ::krm::Log::s_LogCore->info(__VA_ARGS__);
+#define KRM_LOG_CORE_WARN(...)  ::krm::Log::s_LogCore->warn(__VA_ARGS__);
+#define KRM_LOG_CORE_ERROR(...) ::krm::Log::s_LogCore->error(__VA_ARGS__);
 
-#define KRM_LOG_CLIENT_TRACE(...) ::krm::Log::getClientLogger()->trace(__VA_ARGS__);
-#define KRM_LOG_CLIENT_INFO(...)  ::krm::Log::getClientLogger()->info(__VA_ARGS__);
-#define KRM_LOG_CLIENT_WARN(...)  ::krm::Log::getClientLogger()->warn(__VA_ARGS__);
-#define KRM_LOG_CLIENT_ERROR(...) ::krm::Log::getClientLogger()->error(__VA_ARGS__);
+#define KRM_LOG_CLIENT_TRACE(...) ::krm::Log::s_LogClient->trace(__VA_ARGS__);
+#define KRM_LOG_CLIENT_INFO(...)  ::krm::Log::s_LogClient->info(__VA_ARGS__);
+#define KRM_LOG_CLIENT_WARN(...)  ::krm::Log::s_LogClient->warn(__VA_ARGS__);
+#define KRM_LOG_CLIENT_ERROR(...) ::krm::Log::s_LogClient->error(__VA_ARGS__);
 
 #else
 

@@ -1,14 +1,10 @@
 #pragma once
 #include "KareeemEngine.h"
 
-#include "imgui.h"
-#include "backends/imgui_impl_glfw.h"
-#include "backends/imgui_impl_opengl3.h"
-
 class ClientLayer : public krm::Layer
 {
 public:
-	ClientLayer(GLFWwindow* window);
+	ClientLayer();
 
 	void OnUpdate() override;
 
@@ -16,15 +12,21 @@ public:
 
 	void OnEvent(krm::Event& event) override;
 
-private:
-	bool show_demo_window = true;
-	bool show_another_window = false;
-	ImVec4 clear_color;
+
 };
 
 class SandboxApp : public krm::App
 {
 public:
-	SandboxApp();
-	virtual ~SandboxApp();
+	SandboxApp(krm::Window* window)
+		: krm::App(window)
+	{
+		PushLayer(new ClientLayer); 
+	}
+	virtual ~SandboxApp() {}
 };
+
+krm::App* createApplication(krm::Window* window)
+{
+	return new SandboxApp(window);
+}

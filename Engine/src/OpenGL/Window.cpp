@@ -1,17 +1,20 @@
 #include "Core\KRMpch.h"
-#include "Core\Window.h"
+
+#include "Window.h"
+
 #include "Core\Log.h"
 
 #include "Events\KeyEvent.h"
 #include "Events\MouseEvent.h"
 #include "Events\ApplicationEvent.h"
 
-#include <GLEW\glew.h>
+#include "OpenGL\OpenGLContext.h"
+
+#define GLFW_INCLUDE_NONE
 #include <GLFW\glfw3.h>
 
 namespace krm {
 
-	static bool s_GLFWInitialized = false;
 
 	Window::Window(WindowProps prop)
 	{
@@ -21,41 +24,16 @@ namespace krm {
 
 		KRM_LOG_CORE_INFO("Creating window {0} ({1}, {2})", prop.Title, prop.Width, prop.Height);
 
-		if (!s_GLFWInitialized)
-		{
-			// TODO: glfwTerminate on system shutdown
-			if(!glfwInit())
-			{
-				glfwSetErrorCallback([](int error, const char* message) 
-					{ 
-						KRM_LOG_CORE_ERROR("Failed to Initialized GLFW");
-						KRM_LOG_CORE_ERROR("GLFW Error : ({0}), ({1})", error, message);
-					}
-				);
-			}
-
-		}
-
 		m_Window = glfwCreateWindow((int)prop.Width, (int)prop.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_Window);
+		
+		OpenGLContext::setContext(m_Window);
+
+
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		setVSync(true);
 
-		if (!s_GLFWInitialized)
-		{
-
-			if (glewInit() != GLEW_OK)
-			{
-				KRM_LOG_CORE_ERROR("Error to initialized GLEW");
-			}
-
-			s_GLFWInitialized = true;
-		}
-
-		KRM_LOG_CORE_INFO("{}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
-
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		// Set GLFW callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
@@ -148,7 +126,7 @@ namespace krm {
 	void Window::onUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		OpenGLContext::swapBuffer();
 	}
 
 	void Window::setVSync(bool enable)

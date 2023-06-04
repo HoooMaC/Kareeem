@@ -10,17 +10,12 @@
 
 #include "Events\Event.h"
 
-#include "GLFW\glfw3.h"
-
-
-
 namespace krm {
 
-	App::App(const std::string& name, uint32_t width, uint32_t height)
-		: myWindow({name, width, height})
+	App::App(Window* window)
 	{
-		myWindow.setEventCallback(BIND_EVENT_FN(App::eventHandle));
-		m_Window = (GLFWwindow*)myWindow.getNativeWindow();
+		m_Window = window;
+		m_Window->setEventCallback(BIND_EVENT_FN(App::eventHandle));
 	}
 
 	App::~App()
@@ -60,7 +55,7 @@ namespace krm {
 		m_VertexArray.addDatatoVertexBuffer(0, vertices, 3);
 		m_VertexArray.addDatatoIndexBuffer(indices, 3);
 
-		m_VertexArray.unbind();
+		//m_VertexArray.unbind();
 
 
 		glm::vec4 u_Color({ 0.4f, 0.1f, 0.8f, 1.0f });
@@ -86,7 +81,7 @@ namespace krm {
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
 
-			myWindow.onUpdate();
+			m_Window->onUpdate();
 		}
 	}
 
@@ -105,5 +100,6 @@ namespace krm {
 		m_Running = false;
 		return true;
 	}
+
 
 }

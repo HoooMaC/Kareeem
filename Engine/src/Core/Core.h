@@ -11,9 +11,9 @@
 #define BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
 #ifdef _DEBUG
-#define MAIN main()
+	#define MAIN main()
 #else
-#define MAIN WinMain( HINSTANCE	hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int ShowCmd)
+	#define MAIN WinMain( HINSTANCE	hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int ShowCmd)
 #endif
 
 struct Vertex

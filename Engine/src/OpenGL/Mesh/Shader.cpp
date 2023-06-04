@@ -99,6 +99,7 @@ namespace krm {
 			KRM_LOG_CORE_ERROR("Uniform Name Doesn't Exist");
 			ASSERT(false);
 		}
+		return location;
 	}
 
 	void Shader::makeShader(const std::string& vertexFilepath, const std::string& fragmentFilepath)

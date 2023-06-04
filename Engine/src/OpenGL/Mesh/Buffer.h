@@ -65,7 +65,7 @@ namespace krm {
 
 		void inputData(unsigned int* data, int count);
 
-		inline unsigned int GetCount() const { return m_Data.size(); }
+		inline unsigned int GetCount() const { return (unsigned int)m_Data.size(); }
 	};
 
 }
