@@ -14,13 +14,12 @@ namespace krm {
 	{
 	}
 
-	void Renderer::draw(const Shader& shader, const VertexArray& vertexArray)
+	void Renderer::draw(const std::unique_ptr<Shader>& shader, const std::unique_ptr<VertexArray>& vertexArray)
 	{
-		shader.bind();
-		//shader.bindAndUploadUniform();
-
-		vertexArray.bind();
-		glDrawElements(GL_TRIANGLES, vertexArray.getCount(), GL_UNSIGNED_INT, nullptr);
+		shader->bind();
+		//shader->bindAndUploadUniform();
+		vertexArray->bind();
+		glDrawElements(GL_TRIANGLES, vertexArray->getCount(), GL_UNSIGNED_INT, nullptr);
 	}
 
 }

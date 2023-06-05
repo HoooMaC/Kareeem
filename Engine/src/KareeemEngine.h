@@ -11,5 +11,8 @@
 #include "Core/Layer/Layer.h"
 #include "Core/Layer/LayerStack.h"
 
+#include "Core/Camera/OrthographicCamera.h"
+#include "Core/Camera/OrthographicCameraController.h"
+
 #include "OpenGL/Window.h"
 #include "OpenGL/OpenGLContext.h"

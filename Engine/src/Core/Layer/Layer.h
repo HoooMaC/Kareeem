@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Core/Camera/TimeStep.h"
+
 #include "Events/Event.h"
 
 namespace krm {
@@ -12,9 +14,9 @@ namespace krm {
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(TimeStep ts) {}
 		virtual void OnImGuiRender() {}
-		virtual void OnEvent(Event& event) {}
+		virtual void eventHandle(Event& event) {}
 
 		inline const std::string& GetName() const { return m_DebugName; }
 	protected:

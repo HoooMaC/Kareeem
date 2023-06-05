@@ -18,6 +18,7 @@ namespace krm {
 		KRM_LOG_CORE_INFO("Vertex Array has been generated and bound succesfully with Id : {0}", m_RendererID);
 
 		m_VertexBuffers = std::make_unique<VertexBuffer>();
+		m_IndexBuffer = std::make_unique<IndexBuffer>();
 	}
 
 	VertexArray::~VertexArray()
@@ -56,18 +57,18 @@ namespace krm {
 		KRM_LOG_CORE_INFO("Vertex Array with Id : {0} has been unbound", m_RendererID);
 	}
 
-	void VertexArray::addDatatoVertexBuffer(unsigned int index, Vertex* data, int count)
+	void VertexArray::addDatatoVertexBuffer(Vertex* data, int count)
 	{
 		m_VertexBuffers->bind();
-		m_VertexBuffers->inputData(data, 3);
+		m_VertexBuffers->inputData(data, count);
 		m_VertexBuffers->setData();
 	}
 
 	void VertexArray::addDatatoIndexBuffer(unsigned int* data, int count)
 	{
-		m_IndexBuffer.bind();
-		m_IndexBuffer.inputData(data, 3);
-		m_IndexBuffer.setData();
+		m_IndexBuffer->bind();
+		m_IndexBuffer->inputData(data, count);
+		m_IndexBuffer->setData();
 	}
 
 }

@@ -70,19 +70,23 @@ namespace krm {
 	{
 		//must fixed, if uniform is an array
 		std::string target = variable;
-		if (m_UniformList[target].m_count > 1)
-		{
-			if (target.find("[0]") == std::string::npos)
-			{
-				target.append("[0]");
-			}
-		}
+		//if (m_UniformList[target].m_count > 1)
+		//{
+		//	if (target.find("[0]") == std::string::npos)
+		//	{
+		//		target.append("[0]");
+		//	}
+		//}
 
 		if (m_UniformList.find(target) == m_UniformList.end())
 		{
-			KRM_LOG_CORE_ERROR("Variable not found");
-			ASSERT(false);
-			return;
+			if (m_UniformList.find(target + "[0]") == m_UniformList.end())
+			{
+				KRM_LOG_CORE_ERROR("Variable not found");
+				ASSERT(false);
+				return;
+			}
+			target.append("[0]");
 		}
 
 

@@ -5,6 +5,8 @@
 
 #include "Core\Layer\LayerStack.h"
 
+#include "Core\Camera\OrthographicCamera.h"
+
 #include "Events\Event.h"
 #include "Events\ApplicationEvent.h"
 #include "Events\KeyEvent.h"
@@ -27,14 +29,17 @@ namespace krm {
 		void PushOverlay(Layer* layer);
 
 		void eventHandle(Event& e);
+	protected:
+		LayerStack m_LayerStack;
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnKeyPressed(KeyPressedEvent& e);
 	private:
-		LayerStack m_LayerStack;
 		Window* m_Window;
 
 		bool m_Running = true;
 		VertexArray m_VertexArray;
+		float m_LastFrameTime = 0.0f;
 		};
 
 }
