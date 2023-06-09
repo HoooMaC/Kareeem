@@ -5,6 +5,8 @@
 #include "Core\Log.h"
 #include "GLEW\glew.h"
 
+#include "OpenGL\Mesh\MeshLog.h"
+
 
 namespace krm {
 

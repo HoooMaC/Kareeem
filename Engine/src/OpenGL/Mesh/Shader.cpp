@@ -4,6 +4,8 @@
 
 #include "Core/Log.h"
 
+#include "OpenGL/Mesh/MeshLog.h"
+
 #include <GLEW/glew.h>
 
 namespace krm {
@@ -11,6 +13,8 @@ namespace krm {
 	Shader::Shader(const std::string& vertexFilepath, const std::string& fragmentFilepath)
 		: m_vertexFilePath(vertexFilepath), m_fragmentFilepath(fragmentFilepath)
 	{
+		//KRM_MESH_TRACE("TEST");
+
 		makeShader(vertexFilepath, fragmentFilepath);
 
 		//we can use glGetActiveUniform here
@@ -35,6 +39,7 @@ namespace krm {
 
 	{
 		glDeleteProgram(m_RendererID);
+		//KRM_TRACE_MESSAGE("Shader has with Id : {0} been deleted", m_RendererID);
 		KRM_LOG_CORE_INFO("Shader has with Id : {0} been deleted", m_RendererID);
 	}
 
@@ -42,6 +47,8 @@ namespace krm {
 	{
 		glUseProgram(m_RendererID);
 
+		std::string text = "alhamdulillah";
+		KRM_TRACE_MESSAGE("Shader with Id : {} has been bound {}", m_RendererID, text);
 		KRM_LOG_CORE_INFO("Shader with Id : {0} has been bound", m_RendererID);
 	}
 
