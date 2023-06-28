@@ -13,16 +13,12 @@ namespace krm {
 	Shader::Shader(const std::string& vertexFilepath, const std::string& fragmentFilepath)
 		: m_vertexFilePath(vertexFilepath), m_fragmentFilepath(fragmentFilepath)
 	{
-		//KRM_MESH_TRACE("TEST");
-
 		makeShader(vertexFilepath, fragmentFilepath);
 
-		//we can use glGetActiveUniform here
-		//getUniform()
 		int num_uniforms, maxUniformLength;
 		glGetProgramiv(m_RendererID, GL_ACTIVE_UNIFORMS, &num_uniforms);
 		glGetProgramiv(m_RendererID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxUniformLength);
-		//ini masih belum solid. Mungkin pakai vector tidak terlalu efektif
+
 		for (int i = 0; i < num_uniforms; i++)
 		{
 			GLchar* name = new char[maxUniformLength];
@@ -39,23 +35,20 @@ namespace krm {
 
 	{
 		glDeleteProgram(m_RendererID);
-		//KRM_TRACE_MESSAGE("Shader has with Id : {0} been deleted", m_RendererID);
-		KRM_LOG_CORE_INFO("Shader has with Id : {0} been deleted", m_RendererID);
+		KRM_INFO_MESSAGE("Shader has with Id : {} been deleted", m_RendererID);
 	}
 
 	void Shader::bind() const
 	{
 		glUseProgram(m_RendererID);
 
-		std::string text = "alhamdulillah";
-		KRM_TRACE_MESSAGE("Shader with Id : {} has been bound {}", m_RendererID, text);
-		KRM_LOG_CORE_INFO("Shader with Id : {0} has been bound", m_RendererID);
+		KRM_INFO_MESSAGE("Shader with Id : {} has been bound", m_RendererID);
 	}
 
 	void Shader::unbind() const
 	{
 		glUseProgram(0);
-		KRM_LOG_CORE_INFO("Shader with Id : {0} has been unbound", m_RendererID);
+		KRM_INFO_MESSAGE("Shader with Id : {} has been unbound", m_RendererID);
 	}
 
 	void Shader::bindAndUploadUniform() const
@@ -69,7 +62,7 @@ namespace krm {
 		//	countUniform++;
 		//}
 
-		//KRM_LOG_CORE_INFO("Shader with Id : {0} has been bound and {1} uniform has been uploaded", m_RendererID, countUniform);
+		//KRM_INFO_MESSAGE("Shader with Id : {} has been bound and {1} uniform has been uploaded", m_RendererID, countUniform);
 	}
 
 	//need to change this function name
@@ -195,9 +188,7 @@ namespace krm {
 
 
 			const char* shadertype = (type == GL_VERTEX_SHADER ? "vertex" : "fragment");
-			KRM_LOG_CORE_ERROR("Failed to compile [{0}] shader", shadertype);
-			//std::cout << "Failed to compile "
-				//<< (type == GL_VERTEX_SHADER ? "vertex " : "fragment ") << "shader\n" << message << "\n";
+			KRM_LOG_CORE_ERROR("Failed to compile [{}] shader", shadertype);
 			KRM_LOG_CORE_ERROR("{}", message);
 			delete[] message;
 			glDeleteShader(id);
@@ -222,7 +213,7 @@ namespace krm {
 		glDeleteShader(vs);
 		glDeleteShader(fs);
 
-		KRM_LOG_CORE_INFO("Shader program has been created succesfully with Id : {0}", program);
+		KRM_INFO_MESSAGE("Shader program has been created succesfully with Id : {}", program);
 
 		return program;
 	}

@@ -6,16 +6,15 @@
 
 namespace krm {
 
-    std::shared_ptr<spdlog::logger> Log::s_LogCore;
-    std::shared_ptr<spdlog::logger> Log::s_LogClient;
+    std::shared_ptr<spdlog::logger> Log::s_LogCore = Log::initializedLogger("CORE");
+    std::shared_ptr<spdlog::logger> Log::s_LogClient = Log::initializedLogger("APP");
 
-    void Log::Init() {
-        spdlog::set_pattern("%^[%T] %n: %v%$");
-        s_LogCore = spdlog::stdout_color_mt("CORE");
-        //s_LogCore->set_level(spdlog::level::trace);
-
-        s_LogClient = spdlog::stdout_color_mt("APP");
-        //s_LogClient->set_level(spdlog::level::trace);
+    std::shared_ptr<spdlog::logger>& Log::initializedLogger(const std::string& name)
+    {
+        std::shared_ptr<spdlog::logger> newLogger = spdlog::stdout_color_mt(name);
+        newLogger->set_pattern("%^[%T] %n: %v%$");
+        newLogger->set_level(spdlog::level::trace);
+        return newLogger;
     }
 
 }

@@ -2,6 +2,7 @@
 
 #include <typeinfo>
 #include <memory>
+#include <string>
 
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
@@ -16,7 +17,6 @@ namespace krm {
 
 		static std::shared_ptr<spdlog::logger>& getMeshLog()
 		{
-			//static std::shared_ptr<spdlog::logger>& s_MeshLogger = initializedLogger();
 			s_MeshLogger->set_level(spdlog::level::trace);
 			return s_MeshLogger; 
 		}
@@ -26,7 +26,7 @@ namespace krm {
 		static std::shared_ptr<spdlog::logger>& initializedLogger()
 		{
 			std::shared_ptr<spdlog::logger>logger = spdlog::stdout_color_mt("Mesh Log");
-			logger->set_pattern("%^[%T] %n: %v%$");
+			logger->set_pattern("%^%v%$");
 			logger->set_level(spdlog::level::trace);
 			return logger;
 		}
@@ -41,19 +41,32 @@ namespace krm {
 #define ENABLE_MESH_LOG
 
 #ifdef ENABLE_MESH_LOG
-#define KRM_MESH_TRACE(...) ::krm::MeshLog::getMeshLog()->trace(__VA_ARGS__);
-#define KRM_TRACE_MESSAGE(message, ...) KRM_MESH_TRACE("[{}] : " #message, typeid(*this).name(), __VA_ARGS__)
 
-#define KRM_MESH_INFO(...) ::krm::MeshLog::getMeshLog()->info(__VA_ARGS__);
-#define KRM_INFO_MESSAGE(message, ...) KRM_MESH_INFO("[{}] : " #message, typeid(*this).name(), __VA_ARGS__)
+#define KRM_MESH_STRIP_CLASS_NAME(class_name) \
+	[](const char* name) { \
+		std::string result(name); \
+		size_t colons = result.find("::"); \
+		if (colons != std::string::npos) \
+			result = result.substr(colons + 2); \
+		size_t ampersand = result.find("&"); \
+		if (ampersand != std::string::npos) \
+			result = result.substr(0, ampersand); \
+		return result; \
+	}(typeid(class_name).name())
 
-#define KRM_MESH_ERROR(...) ::krm::MeshLog::getMeshLog()->error(__VA_ARGS__);
-#define KRM_ERROR_MESSAGE(message, ...) KRM_MESH_ERROR("[{}] : " #message, typeid(*this).name(), __VA_ARGS__)
+#define KRM_MESH_TRACE(...) ::krm::MeshLog::getMeshLog()->trace("[{}] : {}", KRM_MESH_STRIP_CLASS_NAME(*this), fmt::format(__VA_ARGS__))
+#define KRM_TRACE_MESSAGE(...) KRM_MESH_TRACE(__VA_ARGS__)
 
-#define KRM_MESH_WARN(...) ::krm::MeshLog::getMeshLog()->warn(__VA_ARGS__);
-#define KRM_WARN_MESSAGE(message, ...) KRM_MESH_WARN("[{}] : " #message, typeid(*this).name(), __VA_ARGS__)
+#define KRM_MESH_INFO(...) ::krm::MeshLog::getMeshLog()->info("[{}] : {}", KRM_MESH_STRIP_CLASS_NAME(*this), fmt::format(__VA_ARGS__))
+#define KRM_INFO_MESSAGE(...) KRM_MESH_INFO(__VA_ARGS__)
 
+#define KRM_MESH_ERROR(...) ::krm::MeshLog::getMeshLog()->error("[{}] : {}", KRM_MESH_STRIP_CLASS_NAME(*this), fmt::format(__VA_ARGS__))
+#define KRM_ERROR_MESSAGE(...) KRM_MESH_ERROR(__VA_ARGS__)
 
+#define KRM_MESH_WARN(...) ::krm::MeshLog::getMeshLog()->warn("[{}] : {}", KRM_MESH_STRIP_CLASS_NAME(*this), fmt::format(__VA_ARGS__))
+#define KRM_WARN_MESSAGE(...) KRM_MESH_WARN(__VA_ARGS__)
+
+#define KRM_MESH_ASSERT(x, ...) if(!(x)) { KRM_MESH_ERROR("[{}] : {}", KRM_MESH_STRIP_CLASS_NAME(*this), fmt::format(__VA_ARGS__)); __debugbreak(); }
 
 
 #endif //ENABLE_MESH_LOG

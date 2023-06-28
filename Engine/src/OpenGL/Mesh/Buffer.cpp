@@ -23,25 +23,25 @@ namespace krm {
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
 
-		KRM_LOG_CORE_INFO("Vertex Buffer has been generated with Id : {0} and bound succesfully", m_RendererID);
+		KRM_INFO_MESSAGE("Vertex Buffer has been generated with Id : {} and bound succesfully", m_RendererID);
 	}
 
 	VertexBuffer::~VertexBuffer()
 	{
 		glDeleteBuffers(1, &m_RendererID);
-		KRM_LOG_CORE_INFO("Vertex Buffer with Id : {0} has been deleted", m_RendererID);
+		KRM_INFO_MESSAGE("Vertex Buffer with Id : {} has been deleted", m_RendererID);
 	}
 
 	void VertexBuffer::bind() const
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-		KRM_LOG_CORE_INFO("Vertex Buffer with Id : {0} has been bound", m_RendererID);
+		KRM_INFO_MESSAGE("Vertex Buffer with Id : {} has been bound", m_RendererID);
 	}
 
 	void VertexBuffer::unbind() const
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		KRM_LOG_CORE_INFO("Vertex Buffer with Id : {0} has been unbound", m_RendererID);
+		KRM_INFO_MESSAGE("Vertex Buffer with Id : {} has been unbound", m_RendererID);
 	}
 
 	void VertexBuffer::setData()
@@ -58,7 +58,7 @@ namespace krm {
 	void VertexBuffer::clearData()
 	{
 		m_Data.clear();
-		KRM_LOG_CORE_INFO("All of the vertex buffer with Id : {0} has been cleared", m_RendererID);
+		KRM_INFO_MESSAGE("All of the vertex buffer with Id : {} has been cleared", m_RendererID);
 	}
 
 	/// ////////////////////////////////////////////////////////////////////
@@ -73,31 +73,31 @@ namespace krm {
 		glGenBuffers(1, &m_RendererID);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeIBO, nullptr, GL_DYNAMIC_DRAW);
-		KRM_LOG_CORE_INFO("Index Buffer has been created and bound with Id : {0}", m_RendererID);
+		KRM_INFO_MESSAGE("Index Buffer has been created and bound with Id : {}", m_RendererID);
 	}
 
 	IndexBuffer::~IndexBuffer()
 	{
 		glDeleteBuffers(1, &m_RendererID);
-		KRM_LOG_CORE_INFO("Index Buffer with Id : {0} has been deleted", m_RendererID);
+		KRM_INFO_MESSAGE("Index Buffer with Id : {} has been deleted", m_RendererID);
 	}
 
 	void IndexBuffer::bind() const
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
-		KRM_LOG_CORE_INFO("Index Buffer with Id : {0} has been bound", m_RendererID);
+		KRM_INFO_MESSAGE("Index Buffer with Id : {} has been bound", m_RendererID);
 	}
 
 	void IndexBuffer::unbind() const
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		KRM_LOG_CORE_INFO("Index Buffer with Id : {0} has been unbound", m_RendererID);
+		KRM_INFO_MESSAGE("Index Buffer with Id : {} has been unbound", m_RendererID);
 	}
 
 	void IndexBuffer::clearData()
 	{
 		m_Data.clear();
-		KRM_LOG_CORE_INFO("All of the index buffer with Id : {0} has been cleared", m_RendererID);
+		KRM_INFO_MESSAGE("All of the index buffer with Id : {} has been cleared", m_RendererID);
 	}
 
 	void IndexBuffer::inputData(unsigned int* data, int count)
