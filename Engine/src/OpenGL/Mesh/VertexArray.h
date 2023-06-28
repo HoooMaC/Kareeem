@@ -10,7 +10,7 @@ namespace krm {
 	///  Vertex Array
 	/// ////////////////////////////////////////////////////////////////////
 
-	class VertexArray : public OpenGL
+	class VertexArray
 	{
 	public:
 		VertexArray();
@@ -18,8 +18,8 @@ namespace krm {
 
 		void setVertexArray();
 
-		void bind() const override;
-		void unbind() const override;
+		void bind() const;
+		void unbind() const;
 
 	//	void setVertexBuffer();
 		void addDatatoVertexBuffer(Vertex* data, int count);
@@ -27,6 +27,8 @@ namespace krm {
 
 		unsigned int getCount() const { return m_IndexBuffer->GetCount(); }
 	private:
+		unsigned int m_RendererID;
+
 		std::unique_ptr<VertexBuffer> m_VertexBuffers;
 		std::unique_ptr<IndexBuffer> m_IndexBuffer;
 	};

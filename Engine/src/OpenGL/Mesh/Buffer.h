@@ -4,7 +4,7 @@
 
 namespace krm {
 
-	class OpenGL
+/*	class OpenGL
 	{
 	public:
 		virtual void bind() const = 0;
@@ -27,45 +27,52 @@ namespace krm {
 	protected:
 		std::vector<T> m_Data;
 	};
-
+*/
 	/// ////////////////////////////////////////////////////////////////////
 	///  Vertex Buffer
 	/// ////////////////////////////////////////////////////////////////////
 
-	class VertexBuffer : public OpenGL, public Buffer<Vertex>
+	class VertexBuffer
 	{
 	public:
 		VertexBuffer();
 		~VertexBuffer();
 
-		void bind() const override;
-		void unbind() const override;
+		void bind() const;
+		void unbind() const;
 
-		void clearData() override;
-		void setData() override;
+		void clearData();
+		void setData();
 
 		void inputData(Vertex* data, int count);
+	private: 
+		unsigned int m_RendererID;
+		std::vector<Vertex> m_Data;
 	};
 
 	/// ////////////////////////////////////////////////////////////////////
 	///  Index Buffer
 	/// ////////////////////////////////////////////////////////////////////
 
-	class IndexBuffer : public OpenGL, public Buffer<unsigned int>
+	class IndexBuffer
 	{
 	public:
 		IndexBuffer();
 		~IndexBuffer();
 
-		void bind() const override;
-		void unbind() const override;
+		void bind() const;
+		void unbind() const;
 
-		void clearData() override;
-		void setData() override;
+		void clearData();
+		void setData();
 
 		void inputData(unsigned int* data, int count);
 
 		inline unsigned int GetCount() const { return (unsigned int)m_Data.size(); }
+
+	private:
+		unsigned int m_RendererID;
+		std::vector<unsigned int> m_Data;
 	};
 
 }

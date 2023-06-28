@@ -36,7 +36,7 @@ namespace krm {
 
 	};
 
-	class Shader : public OpenGL
+	class Shader
 	{
 	private:
 
@@ -44,8 +44,8 @@ namespace krm {
 		Shader(const std::string& vertexFilepath, const std::string& fragmentFilepath);
 		~Shader();
 
-		void bind() const override;
-		void unbind() const override;
+		void bind() const;
+		void unbind() const;
 
 		void bindAndUploadUniform() const;
 
@@ -61,6 +61,8 @@ namespace krm {
 		unsigned int createShader(const std::string& v_Shader, const std::string& f_Shader);
 
 	private:
+		unsigned int m_RendererID;
+
 		std::string m_vertexFilePath, m_fragmentFilepath;
 		std::unordered_map<std::string, UniformData> m_UniformList;
 	};
