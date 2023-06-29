@@ -38,7 +38,6 @@ namespace krm {
 		Window* m_Window;
 
 		bool m_Running = true;
-		VertexArray m_VertexArray;
 		float m_LastFrameTime = 0.0f;
 		};
 

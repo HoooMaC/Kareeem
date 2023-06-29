@@ -18,10 +18,6 @@ namespace krm {
 	{
 		glGenVertexArrays(1, &m_RendererID);
 		glBindVertexArray(m_RendererID);
-		KRM_WARN_MESSAGE("WARN Vertex Array has been generated and bound succesfully with Id : {}", m_RendererID);
-		KRM_INFO_MESSAGE("INFO Vertex Array has been generated and bound succesfully with Id : {}", m_RendererID);
-		KRM_ERROR_MESSAGE("ERROR Vertex Array has been generated and bound succesfully with Id : {}", m_RendererID);
-		KRM_TRACE_MESSAGE("TRACE Vertex Array has been generated and bound succesfully with Id : {}", m_RendererID);
 		KRM_INFO_MESSAGE("Vertex Array has been generated and bound succesfully with Id : {}", m_RendererID);
 
 		m_VertexBuffers = std::make_unique<VertexBuffer>();

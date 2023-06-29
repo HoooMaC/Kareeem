@@ -10,8 +10,10 @@
 
 #include "OpenGL\OpenGLContext.h"
 
-#define GLFW_INCLUDE_NONE
+#include <GLEW\glew.h>
 #include <GLFW\glfw3.h>
+
+static bool s_Initialized = false;
 
 namespace krm {
 
@@ -24,10 +26,31 @@ namespace krm {
 
 		KRM_LOG_CORE_INFO("Creating window {0} ({1}, {2})", prop.Title, prop.Width, prop.Height);
 
-		m_Window = glfwCreateWindow((int)prop.Width, (int)prop.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		
+		if (!s_Initialized)
+		{
+			int result = glfwInit();
+			if(result)
+				m_Window = glfwCreateWindow((int)prop.Width, (int)prop.Height, m_Data.Title.c_str(), nullptr, nullptr);
+			else
+			{
+				KRM_LOG_CORE_ERROR("Failed to initialized GLFW");
+				ASSERT(false);
+			}
+		}	
+
 		OpenGLContext::setContext(m_Window);
 
+		if (!s_Initialized)
+		{
+			GLenum result = glewInit();
+			if (result != GLEW_OK)
+			{
+				KRM_LOG_CORE_ERROR("Failed to Initialized GLEW");
+				ASSERT(false);
+				OpenGLContext::destroyContext();
+			}
+			s_Initialized = true;
+		}
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		setVSync(true);
