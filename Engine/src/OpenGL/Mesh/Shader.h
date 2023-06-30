@@ -49,11 +49,11 @@ namespace krm {
 
 		void bindAndUploadUniform() const;
 
-		void uploadUniform(const char* variable, const void* data);
-
+		void setUniformData(const char* variable, const void* data);
 	private:
 
 		int getUniformLoc(const std::string& variable);
+		void uploadUniform(UniformData& uniform) const;
 
 		void makeShader(const std::string& vertexFilepath, const std::string& fragmentFilepath);
 		std::pair<std::string, std::string> readShader(const std::string& vertexFilepath, const std::string& fragmentFilepath);

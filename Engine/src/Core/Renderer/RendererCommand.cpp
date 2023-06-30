@@ -2,6 +2,8 @@
 
 #include "RendererCommand.h"
 
+#include "OpenGL/Mesh/VertexArray.h"
+
 #include <GLEW/glew.h>
 
 namespace krm {
@@ -25,6 +27,11 @@ namespace krm {
 	void RendererCommand::enableDepth()
 	{
 		glEnable(GL_DEPTH_TEST);
+	}
+
+	void RendererCommand::draw(std::shared_ptr<VertexArray>& va)
+	{
+		glDrawElements(GL_TRIANGLES, va->getCount(), GL_UNSIGNED_INT, nullptr);
 	}
 
 }

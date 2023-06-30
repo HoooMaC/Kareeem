@@ -29,7 +29,7 @@ namespace krm {
 	VertexBuffer::~VertexBuffer()
 	{
 		glDeleteBuffers(1, &m_RendererID);
-		KRM_INFO_MESSAGE("Vertex Buffer with Id : {} has been deleted", m_RendererID);
+		KRM_LOG_CORE_INFO("Vertex Buffer with Id : {} has been deleted", m_RendererID);
 	}
 
 	void VertexBuffer::bind() const
@@ -79,7 +79,7 @@ namespace krm {
 	IndexBuffer::~IndexBuffer()
 	{
 		glDeleteBuffers(1, &m_RendererID);
-		KRM_INFO_MESSAGE("Index Buffer with Id : {} has been deleted", m_RendererID);
+		KRM_LOG_CORE_INFO("Index Buffer with Id : {} has been deleted", m_RendererID);
 	}
 
 	void IndexBuffer::bind() const

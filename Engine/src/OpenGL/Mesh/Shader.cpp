@@ -32,10 +32,9 @@ namespace krm {
 	}
 
 	Shader::~Shader()
-
 	{
 		glDeleteProgram(m_RendererID);
-		KRM_INFO_MESSAGE("Shader has with Id : {} been deleted", m_RendererID);
+		KRM_LOG_CORE_INFO("Shader has with Id : {} been deleted", m_RendererID);
 	}
 
 	void Shader::bind() const
@@ -55,28 +54,20 @@ namespace krm {
 	{
 		glUseProgram(m_RendererID);
 
-		//int countUniform = 0;
-		//for (auto& uniform : m_UniformList)
-		//{
-		//	uploadUniform(uniform);
-		//	countUniform++;
-		//}
+		int countUniform = 0;
+		for (auto[variable, uniform] : m_UniformList)
+		{
+			uploadUniform(uniform);
+			countUniform++;
+		}
 
-		//KRM_INFO_MESSAGE("Shader with Id : {} has been bound and {1} uniform has been uploaded", m_RendererID, countUniform);
+		KRM_INFO_MESSAGE("Shader with Id : {} has been bound and {} uniform has been uploaded", m_RendererID, countUniform);
 	}
 
 	//need to change this function name
-	void Shader::uploadUniform(const char* variable, const void* data)
+	void Shader::setUniformData(const char* variable, const void* data)
 	{
-		//must fixed, if uniform is an array
 		std::string target = variable;
-		//if (m_UniformList[target].m_count > 1)
-		//{
-		//	if (target.find("[0]") == std::string::npos)
-		//	{
-		//		target.append("[0]");
-		//	}
-		//}
 
 		if (m_UniformList.find(target) == m_UniformList.end())
 		{
@@ -93,28 +84,31 @@ namespace krm {
 		m_UniformList[target].m_location = glGetUniformLocation(m_RendererID, target.c_str());
 		m_UniformList[target].m_data = data;
 
-		switch (m_UniformList[target].m_type)
-		{
-		case GL_BOOL	   : return glUniform1iv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const int*)m_UniformList[target].m_data); 
-		case GL_INT		   : return glUniform1iv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const int*)m_UniformList[target].m_data); 
-		case GL_SAMPLER_2D : return glUniform1iv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const int*)m_UniformList[target].m_data);
-		case GL_INT_VEC2   : return glUniform2iv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const int*)m_UniformList[target].m_data); 
-		case GL_INT_VEC3   : return glUniform3iv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const int*)m_UniformList[target].m_data); 
-		case GL_INT_VEC4   : return glUniform4iv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const int*)m_UniformList[target].m_data); 
-		case GL_FLOAT	   : return glUniform1fv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const float*)m_UniformList[target].m_data); 
-		case GL_FLOAT_VEC2 : return glUniform2fv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const float*)m_UniformList[target].m_data); 
-		case GL_FLOAT_VEC3 : return glUniform3fv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const float*)m_UniformList[target].m_data); 
-		case GL_FLOAT_VEC4 : return glUniform4fv(m_UniformList[target].m_location, m_UniformList[target].m_count, (const float*)m_UniformList[target].m_data); 
-		case GL_FLOAT_MAT2 : return glUniformMatrix2fv(m_UniformList[target].m_location, m_UniformList[target].m_count, GL_FALSE, (const float*)m_UniformList[target].m_data); 
-		case GL_FLOAT_MAT3 : return glUniformMatrix3fv(m_UniformList[target].m_location, m_UniformList[target].m_count, GL_FALSE, (const float*)m_UniformList[target].m_data); 
-		case GL_FLOAT_MAT4 : return glUniformMatrix4fv(m_UniformList[target].m_location, m_UniformList[target].m_count, GL_FALSE, (const float*)m_UniformList[target].m_data); 
-		}
-		KRM_LOG_CORE_ERROR("Uniform {} Type unknown", target);
-
-		ASSERT(false);
+		uploadUniform(m_UniformList[target]);
 		return;
 	}
 
+	void Shader::uploadUniform(UniformData& uniform) const
+	{
+		switch (uniform.m_type)
+		{
+		case GL_BOOL	   : return glUniform1iv(uniform.m_location, uniform.m_count, (const int*)uniform.m_data); 
+		case GL_INT		   : return glUniform1iv(uniform.m_location, uniform.m_count, (const int*)uniform.m_data); 
+		case GL_SAMPLER_2D : return glUniform1iv(uniform.m_location, uniform.m_count, (const int*)uniform.m_data);
+		case GL_INT_VEC2   : return glUniform2iv(uniform.m_location, uniform.m_count, (const int*)uniform.m_data); 
+		case GL_INT_VEC3   : return glUniform3iv(uniform.m_location, uniform.m_count, (const int*)uniform.m_data); 
+		case GL_INT_VEC4   : return glUniform4iv(uniform.m_location, uniform.m_count, (const int*)uniform.m_data); 
+		case GL_FLOAT	   : return glUniform1fv(uniform.m_location, uniform.m_count, (const float*)uniform.m_data); 
+		case GL_FLOAT_VEC2 : return glUniform2fv(uniform.m_location, uniform.m_count, (const float*)uniform.m_data); 
+		case GL_FLOAT_VEC3 : return glUniform3fv(uniform.m_location, uniform.m_count, (const float*)uniform.m_data); 
+		case GL_FLOAT_VEC4 : return glUniform4fv(uniform.m_location, uniform.m_count, (const float*)uniform.m_data); 
+		case GL_FLOAT_MAT2 : return glUniformMatrix2fv(uniform.m_location, uniform.m_count, GL_FALSE, (const float*)uniform.m_data); 
+		case GL_FLOAT_MAT3 : return glUniformMatrix3fv(uniform.m_location, uniform.m_count, GL_FALSE, (const float*)uniform.m_data); 
+		case GL_FLOAT_MAT4 : return glUniformMatrix4fv(uniform.m_location, uniform.m_count, GL_FALSE, (const float*)uniform.m_data); 
+		}
+
+		//KRM_MESH_ASSERT(false, "Uniform {} Type unknown", uniform.m_type);
+	}
 
 	int Shader::getUniformLoc(const std::string& variable)
 	{

@@ -27,7 +27,7 @@ namespace krm {
 	VertexArray::~VertexArray()
 	{
 		(glDeleteVertexArrays(1, &m_RendererID));
-		KRM_INFO_MESSAGE("Vertex Array with Id : {} has been deleted", m_RendererID);
+		KRM_LOG_CORE_INFO("Vertex Array with Id : {} has been deleted", m_RendererID);
 	}
 
 	void VertexArray::setVertexArray()

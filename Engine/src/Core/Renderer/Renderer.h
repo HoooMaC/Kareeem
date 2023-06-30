@@ -10,7 +10,8 @@ namespace krm {
 	public:
 		static void beginScene();
 		static void endScene();
-		static void draw(const std::unique_ptr<Shader>& shader, const std::unique_ptr<VertexArray>& vertexArray);
+		static void submit(const std::unique_ptr<Shader>& shader, const std::unique_ptr<VertexArray>& vertexArray);
+		static void flush();
 	private:
 		struct SceneData
 		{
