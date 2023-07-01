@@ -6,6 +6,7 @@
 
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/fmt/fmt.h"
 #include "spdlog/fmt/ostr.h"
 
 namespace krm {
@@ -15,11 +16,7 @@ namespace krm {
 	public:
 		MeshLog(const MeshLog&) = delete;
 
-		static std::shared_ptr<spdlog::logger>& getMeshLog()
-		{
-			s_MeshLogger->set_level(spdlog::level::trace);
-			return s_MeshLogger; 
-		}
+		static std::shared_ptr<spdlog::logger>& getMeshLog() { return s_MeshLogger; }
 
 	private:
 

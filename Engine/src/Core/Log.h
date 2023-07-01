@@ -15,7 +15,7 @@ namespace krm {
     public:
         Log() {}
 
-        static std::shared_ptr<spdlog::logger>&  initializedLogger(const std::string& name);
+        static std::shared_ptr<spdlog::logger>& initializedLogger(const std::string& name);
     public:
         static std::shared_ptr<spdlog::logger> s_LogCore;
         static std::shared_ptr<spdlog::logger> s_LogClient;

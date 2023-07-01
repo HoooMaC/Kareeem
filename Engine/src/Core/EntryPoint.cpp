@@ -15,12 +15,9 @@ extern krm::App* createApplication(krm::Window* window);
 
 int MAIN
 {
-    KRM_LOG_CLIENT_INFO("CLIENT SIDE LOGGING");
-
     krm::Window window = krm::Window(krm::WindowProps());
 
     krm::App* app = createApplication(&window);
-
 
     app->run();
 

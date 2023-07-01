@@ -29,9 +29,9 @@ namespace krm {
 		glEnable(GL_DEPTH_TEST);
 	}
 
-	void RendererCommand::draw(std::shared_ptr<VertexArray>& va)
+	void RendererCommand::draw(unsigned int count)
 	{
-		glDrawElements(GL_TRIANGLES, va->getCount(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 
 }

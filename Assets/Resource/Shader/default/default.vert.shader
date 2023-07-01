@@ -9,12 +9,12 @@ out vec2 v_texCoord;
 out float v_texIndex;
 out vec4 v_color;
 
-uniform mat4 pv;
+uniform mat4 projectionView;
 uniform mat4 model;
 
 void main()
 {
-	gl_Position = pv * model * vec4(position, 1.0);
+	gl_Position = projectionView * model * vec4(position, 1.0);
 	v_texCoord = texCoord;
 	v_texIndex = texIndex;
 

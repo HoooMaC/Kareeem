@@ -12,9 +12,9 @@ public:
 	void eventHandle(krm::Event& e) override;
 
 private:
-	std::shared_ptr<krm::Shader> defaultShader;
-	std::shared_ptr<krm::VertexArray> m_VertexArray;
-	glm::vec3 position;
+	//std::shared_ptr<krm::Shader> defaultShader;
+	//std::shared_ptr<krm::VertexArray> m_VertexArray;
+	//glm::vec3 position;
 
 	krm::OrthographicCameraController m_CameraController;
 	glm::mat4 model;

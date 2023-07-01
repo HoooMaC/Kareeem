@@ -10,9 +10,10 @@ namespace krm {
 	class Renderer2D
 	{
 	public:
-		static void beginScene(std::shared_ptr<Shader>& shader, std::shared_ptr<VertexArray>& va);
+		static void init();
+		static void beginScene(const glm::mat4& projectionViewMatrix);
 		static void endScene();
-		static void submit();
+		static void submit(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, float textureIndex);
 		static void flush();
 	private:
 	};

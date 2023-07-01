@@ -2,6 +2,7 @@
 #include "VertexArray.h"
 
 #include "Core/Log.h"
+#include "Core/Core.h"
 
 #include "OpenGL/Mesh/MeshLog.h"
 
@@ -19,15 +20,12 @@ namespace krm {
 		glGenVertexArrays(1, &m_RendererID);
 		glBindVertexArray(m_RendererID);
 		KRM_INFO_MESSAGE("Vertex Array has been generated and bound succesfully with Id : {}", m_RendererID);
-
-		m_VertexBuffers = std::make_unique<VertexBuffer>();
-		m_IndexBuffer = std::make_unique<IndexBuffer>();
 	}
 
 	VertexArray::~VertexArray()
 	{
-		(glDeleteVertexArrays(1, &m_RendererID));
-		KRM_LOG_CORE_INFO("Vertex Array with Id : {} has been deleted", m_RendererID);
+		glDeleteVertexArrays(1, &m_RendererID);
+		//KRM_LOG_CORE_INFO("Vertex Array with Id : {} has been deleted", m_RendererID);
 	}
 
 	void VertexArray::setVertexArray()
@@ -58,20 +56,6 @@ namespace krm {
 	{
 		glBindVertexArray(0);
 		KRM_INFO_MESSAGE("Vertex Array with Id : {} has been unbound", m_RendererID);
-	}
-
-	void VertexArray::addDatatoVertexBuffer(Vertex* data, int count)
-	{
-		m_VertexBuffers->bind();
-		m_VertexBuffers->inputData(data, count);
-		m_VertexBuffers->setData();
-	}
-
-	void VertexArray::addDatatoIndexBuffer(unsigned int* data, int count)
-	{
-		m_IndexBuffer->bind();
-		m_IndexBuffer->inputData(data, count);
-		m_IndexBuffer->setData();
 	}
 
 }

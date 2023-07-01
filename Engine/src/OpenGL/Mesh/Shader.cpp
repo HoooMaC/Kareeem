@@ -34,7 +34,7 @@ namespace krm {
 	Shader::~Shader()
 	{
 		glDeleteProgram(m_RendererID);
-		KRM_LOG_CORE_INFO("Shader has with Id : {} been deleted", m_RendererID);
+		//KRM_INFO_MESSAGE("Shader with Id : {} has been deleted", m_RendererID);
 	}
 
 	void Shader::bind() const
