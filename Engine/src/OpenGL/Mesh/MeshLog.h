@@ -35,7 +35,7 @@ namespace krm {
 
 }
 
-#define ENABLE_MESH_LOG
+//#define ENABLE_MESH_LOG
 
 #ifdef ENABLE_MESH_LOG
 
@@ -64,6 +64,22 @@ namespace krm {
 #define KRM_WARN_MESSAGE(...) KRM_MESH_WARN(__VA_ARGS__)
 
 #define KRM_MESH_ASSERT(x, ...) if(!(x)) { KRM_MESH_ERROR("[{}] : {}", KRM_MESH_STRIP_CLASS_NAME(*this), fmt::format(__VA_ARGS__)); __debugbreak(); }
+
+#else
+
+#define KRM_MESH_TRACE(...)
+#define KRM_TRACE_MESSAGE(...) 
+
+#define KRM_MESH_INFO(...) 
+#define KRM_INFO_MESSAGE(...)
+
+#define KRM_MESH_ERROR(...) 
+#define KRM_ERROR_MESSAGE(...) 
+
+#define KRM_MESH_WARN(...) 
+#define KRM_WARN_MESSAGE(...) 
+
+#define KRM_MESH_ASSERT(x, ...) 
 
 
 #endif //ENABLE_MESH_LOG

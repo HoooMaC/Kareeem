@@ -71,10 +71,10 @@ namespace krm {
 	void Renderer2D::submit(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, float textureIndex)
 	{
 		Vertex vertices[] = {
-			{ { position.x,			 position.y,			0.0f },	{ color }, { 0.0f, 0.0f }, 1.0f },
-			{ { position.x + size.x, position.y,			0.0f },	{ color }, { 1.0f, 0.0f }, 1.0f },
-			{ { position.x + size.x, position.y + size.y,	0.0f },	{ color }, { 1.0f, 1.0f }, 1.0f },
-			{ { position.x,			 position.y + size.y,	0.0f },	{ color }, { 0.0f, 1.0f }, 1.0f }
+			{ { position.x,			 position.y,		  position.z },	{ color }, { 0.0f, 0.0f }, 1.0f },
+			{ { position.x + size.x, position.y,		  position.z },	{ color }, { 1.0f, 0.0f }, 1.0f },
+			{ { position.x + size.x, position.y + size.y, position.z },	{ color }, { 1.0f, 1.0f }, 1.0f },
+			{ { position.x,			 position.y + size.y, position.z },	{ color }, { 0.0f, 1.0f }, 1.0f }
 		};
 
 		s_Data.vertexData.insert(s_Data.vertexData.end(), vertices, vertices + 4);
