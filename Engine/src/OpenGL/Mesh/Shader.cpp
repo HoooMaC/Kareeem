@@ -73,7 +73,7 @@ namespace krm {
 		{
 			if (m_UniformList.find(target + "[0]") == m_UniformList.end())
 			{
-				KRM_LOG_CORE_ERROR("Variable not found");
+				KRM_LOG_CORE_ERROR("Variable \"{}\" not found", variable);
 				ASSERT(false);
 				return;
 			}
@@ -107,7 +107,7 @@ namespace krm {
 		case GL_FLOAT_MAT4 : return glUniformMatrix4fv(uniform.m_location, uniform.m_count, GL_FALSE, (const float*)uniform.m_data); 
 		}
 
-		//KRM_MESH_ASSERT(false, "Uniform {} Type unknown", uniform.m_type);
+		KRM_MESH_ASSERT(false, "Uniform {} Type unknown", uniform.m_type);
 	}
 
 	int Shader::getUniformLoc(const std::string& variable)

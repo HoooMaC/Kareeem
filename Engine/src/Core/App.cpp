@@ -3,7 +3,7 @@
 #include "Core/App.h"
 #include "Core/Core.h"
 #include "Core/Log.h"
-#include "Core/Renderer/Renderer.h"
+
 #include "Core/Renderer/RendererCommand.h"
 
 #include "OpenGL/Mesh/Shader.h"

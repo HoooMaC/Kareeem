@@ -7,6 +7,7 @@
 #include "OpenGL/Mesh/Buffer.h"
 #include "OpenGL/Mesh/VertexArray.h"
 #include "OpenGL/Mesh/Shader.h"
+#include "OpenGL/Mesh/Texture.h"
 
 namespace krm {
 
@@ -21,6 +22,8 @@ namespace krm {
 		std::shared_ptr<VertexArray> vertexArray;
 		std::shared_ptr<VertexBuffer> vertexBuffer;
 		std::shared_ptr<IndexBuffer> indexBuffer;
+
+		std::unique_ptr<Texture> example;
 
 		std::vector<Vertex> vertexData;
 		std::vector<unsigned int> indexData;
@@ -37,6 +40,8 @@ namespace krm {
 		s_Data.vertexBuffer = std::make_shared<VertexBuffer>();
 		s_Data.indexBuffer = std::make_shared<IndexBuffer>();
 
+		s_Data.example = std::make_unique<Texture>("Resource/Textures/example.png", 0);
+
 		s_Data.vertexArray->setVertexArray();
 	}
 	
@@ -50,6 +55,7 @@ namespace krm {
 
 		s_Data.shader->setUniformData("projectionView", glm::value_ptr(projectionViewMatrix));
 		s_Data.shader->setUniformData("model", glm::value_ptr(model));
+		s_Data.shader->setUniformData("u_Texture", &s_Data.example->getSlot());
 
 		s_Data.vertexData.reserve(s_Data.maxVertex);
 		s_Data.indexData.reserve(s_Data.maxIndex);
@@ -59,6 +65,7 @@ namespace krm {
 	{
 		s_Data.shader->bindAndUploadUniform();
 		s_Data.vertexArray->bind();
+		s_Data.example->bind();
 
 		RendererCommand::draw(s_Data.indexData.size());
 
@@ -71,10 +78,10 @@ namespace krm {
 	void Renderer2D::submit(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, float textureIndex)
 	{
 		Vertex vertices[] = {
-			{ { position.x,			 position.y,		  position.z },	{ color }, { 0.0f, 0.0f }, 1.0f },
-			{ { position.x + size.x, position.y,		  position.z },	{ color }, { 1.0f, 0.0f }, 1.0f },
-			{ { position.x + size.x, position.y + size.y, position.z },	{ color }, { 1.0f, 1.0f }, 1.0f },
-			{ { position.x,			 position.y + size.y, position.z },	{ color }, { 0.0f, 1.0f }, 1.0f }
+			{ { position.x,			 position.y,		  position.z },	{ color }, { 0.0f, 0.0f }, textureIndex },
+			{ { position.x + size.x, position.y,		  position.z },	{ color }, { 1.0f, 0.0f }, textureIndex },
+			{ { position.x + size.x, position.y + size.y, position.z },	{ color }, { 1.0f, 1.0f }, textureIndex },
+			{ { position.x,			 position.y + size.y, position.z },	{ color }, { 0.0f, 1.0f }, textureIndex }
 		};
 
 		s_Data.vertexData.insert(s_Data.vertexData.end(), vertices, vertices + 4);

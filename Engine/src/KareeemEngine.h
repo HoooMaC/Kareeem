@@ -5,7 +5,6 @@
 #include "Core/App.h"
 #include "Core/Log.h"
 
-#include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/RendererCommand.h"
 
 #include "Core/Layer/Layer.h"
